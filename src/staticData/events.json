@@ -2,21 +2,24 @@
   "events": [
     {
       "eventId": 1,
+      "name":"CS 397 Meeting",
       "participants": [],
-      "time": "",
-      "location": ""
+      "time": "a",
+      "location": "b"
     },
     {
       "eventId": 2,
+      "name":"Math Meeting",
       "participants": [],
-      "time": "",
-      "location": ""
+      "time": "c",
+      "location": "d"
     },
     {
       "eventId": 3,
+      "name":"Soc 101 Meeting",
       "participants": [],
-      "time": "",
-      "location": ""
+      "time": "e",
+      "location": "f"
     }
   ]
 }
