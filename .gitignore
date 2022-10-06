@@ -19,6 +19,13 @@
 # Icon must end with two \r
 Icon
 
+#production
+/build
+
+# IDE folders
+.vscode/*
+**/.vs/*
+Debug/*
 
 # Thumbnails
 ._*
