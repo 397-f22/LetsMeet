@@ -1,22 +1,22 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import EventComponent from './EventComponent';
-import edata from './staticData/events.json'
+import edata from './staticData/events.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const style = {
+  backgroundColor: 'red',
+};
+
 const App = () => {
-
-
-
-  const [count, setCount] = useState(0);
-
-
   return (
-    <div className="App">
-        {
-          edata.events.map((value) => <EventComponent key={value.eventId} event={value}></EventComponent>)
-        }
+    <div className="container">
+      <div style={style}>LetsMeet</div>
+      <div>
+        {edata.events.map((value) => (
+          <EventComponent key={value.eventId} event={value}></EventComponent>
+        ))}
+      </div>
     </div>
   );
 };

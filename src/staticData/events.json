@@ -2,24 +2,24 @@
   "events": [
     {
       "eventId": 1,
-      "name":"CS 397 Meeting",
-      "participants": [],
-      "time": "a",
-      "location": "b"
+      "name": "CS 397 Meeting",
+      "participants": ["A", "B", "C"],
+      "time": "10:10-11:30",
+      "location": "Tech LR1"
     },
     {
       "eventId": 2,
-      "name":"Math Meeting",
-      "participants": [],
-      "time": "c",
-      "location": "d"
+      "name": "Math Meeting",
+      "participants": ["D", "E", "F"],
+      "time": "16:10-18:30",
+      "location": "Tech LR2"
     },
     {
       "eventId": 3,
-      "name":"Soc 101 Meeting",
-      "participants": [],
-      "time": "e",
-      "location": "f"
+      "name": "Soc 101 Meeting",
+      "participants": ["H", "G"],
+      "time": "12:10-15:30",
+      "location": "Tech LR3"
     }
   ]
 }
