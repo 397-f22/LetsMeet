@@ -1,6 +1,6 @@
 import React from "react";
 
-const Login = ({ handleChange }) => {
+const Login = ({ handleChange, nextStep}) => {
   return (
     <div
       style={{
@@ -41,7 +41,7 @@ const Login = ({ handleChange }) => {
             backgroundColor: "#414BB2",
             color: "white",
           }}
-        >
+         onClick={nextStep}>
           Select Times
         </button>
       </div>

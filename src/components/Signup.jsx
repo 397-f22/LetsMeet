@@ -33,7 +33,8 @@ export default class Signup extends Component {
 
     return (
       <FormStepper step={this.state.step}>
-        <Login handleChange={this.handleChange} />
+        <Login handleChange={this.handleChange} nextStep={this.nextStep}/>
+        <Date day={'Monday'}/>
       </FormStepper>
     );
   }
