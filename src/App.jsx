@@ -3,6 +3,7 @@ import './App.css';
 import EventComponent from './EventComponent';
 import edata from './staticData/events.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Signup from './components/Signup';
 
 const style = {
   backgroundColor: 'red',
@@ -10,14 +11,7 @@ const style = {
 
 const App = () => {
   return (
-    <div className="container">
-      <div style={style}>LetsMeet</div>
-      <div>
-        {edata.events.map((value) => (
-          <EventComponent key={value.eventId} event={value}></EventComponent>
-        ))}
-      </div>
-    </div>
+    <Signup />
   );
 };
 
