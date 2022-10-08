@@ -1,6 +1,6 @@
 import React from "react";
 
-const Login = ({ handleChange, nextStep}) => {
+const Login = ({ handleChange, values, nextStep }) => {
   return (
     <div
       style={{
@@ -14,15 +14,25 @@ const Login = ({ handleChange, nextStep}) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          padding: "10px",
+          padding: "20px",
         }}
       >
         Robotics Club Meeting
       </h1>
-      <div>
-        <label style={{ display: "block" }}>Name:</label>
-        <input type="text" onChange={handleChange} />
-      </div>
+      <label>
+        Name
+        <input
+          style={{
+            display: "block",
+            borderRadius: "4px",
+            padding: "5px 10px",
+          }}
+          type="text"
+          placeholder="Enter username here"
+          value={values.username}
+          onChange={handleChange("username")}
+        />
+      </label>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <button
           style={{
@@ -41,7 +51,8 @@ const Login = ({ handleChange, nextStep}) => {
             backgroundColor: "#414BB2",
             color: "white",
           }}
-         onClick={nextStep}>
+          onClick={nextStep}
+        >
           Select Times
         </button>
       </div>

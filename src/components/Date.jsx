@@ -26,7 +26,7 @@ const Date = ({ day }) => {
         justifyContent: "center",
       }}
     >
-      <h1>Select {day} Time </h1>{" "}
+      <h1 style={{ padding: "20px" }}>Select {day} Availability </h1>
       <div
         style={{
           display: "flex",
@@ -35,10 +35,11 @@ const Date = ({ day }) => {
           gap: "1rem",
         }}
       >
-        {timeOptions.map((time) => (
+        {timeOptions.map((time, idx) => (
           <button
+            key={idx}
             style={{
-              width: "60%",
+              width: "100%",
               height: "50px",
               borderRadius: "5px",
             }}
@@ -50,38 +51,28 @@ const Date = ({ day }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          gap: "10px",
+          alignItems: "center",
+          marginTop: "10px",
         }}
       >
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
             gap: "10px",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
-          <button
-            style={{
-              width: "120px",
-            }}
-          >
+          <button style={{ borderRadius: "4px", width: "100%" }}>
             Previous Day
           </button>
-          <button
-            style={{
-              width: "120px",
-            }}
-          >
+          <button style={{ borderRadius: "4px", width: "100%" }}>
             Next Day
           </button>
         </div>
-
-        <button
-          style={{
-            width: "60%",
-            height: "60px",
-          }}
-        >
+        <button style={{ borderRadius: "4px", padding: "0px 20px" }}>
           Submit
         </button>
       </div>
