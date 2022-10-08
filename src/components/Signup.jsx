@@ -1,45 +1,41 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Date from "./Date";
 import FormStepper from "./FormStepper";
 import Login from "./Login";
 
-export default class Signup extends Component {
-  state = {
+const Signup = () => {
+  const [state, setState] = useState({
     step: 0,
     username: "",
-  };
+  });
 
   // go back to previous step
-  prevStep = () => {
-    const { step } = this.state;
-    this.setState({ step: step - 1 });
+  const prevStep = () => {
+    const { step } = state;
+    setState({ step: step - 1 });
   };
 
   // proceed to the next step
-  nextStep = () => {
-    const { step } = this.state;
-    this.setState({ step: step + 1 });
+  const nextStep = () => {
+    const { step } = state;
+    setState({ step: step + 1 });
   };
 
   // Handle fields change
-  handleChange = (input) => (e) => {
-    this.setState({ [input]: e.target.value });
+  const handleChange = (input) => (e) => {
+    setState({ [input]: e.target.value });
   };
 
-  render() {
-    const { step } = this.state;
-    const { username } = this.state;
-    const values = { username };
+  const { step } = state;
+  const { username } = state;
+  const values = { username };
 
-    return (
-      <FormStepper step={this.state.step}>
-        <Login
-          handleChange={this.handleChange}
-          nextStep={this.nextStep}
-          values={values}
-        />
-        <Date day={"Monday"} />
-      </FormStepper>
-    );
-  }
-}
+  return (
+    <FormStepper step={state.step}>
+      <Login handleChange={handleChange} nextStep={nextStep} values={values} />
+      <Date day={"Monday"} />
+    </FormStepper>
+  );
+};
+
+export default Signup;
