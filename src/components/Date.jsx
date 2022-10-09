@@ -1,21 +1,15 @@
 import React from "react";
 
-const Date = ({ day }) => {
-  const Continue = (e) => {
-    e.preventDefault();
-    nextStep();
-  };
+const Date = ({ day, prevStep, nextStep }) => {
 
-  const Previous = (e) => {
-    e.preventDefault();
-    prevStep();
-  };
+
 
   const timeOptions = [];
 
   for (let i = 0; i < 9; i++) {
     timeOptions.push(`${i + 9}:00`);
   }
+
 
   return (
     <div
@@ -65,10 +59,12 @@ const Date = ({ day }) => {
             width: "100%",
           }}
         >
-          <button style={{ borderRadius: "4px", width: "100%" }}>
+          <button style={{ borderRadius: "4px", width: "100%" }}
+            onClick={prevStep}>
             Previous Day
           </button>
-          <button style={{ borderRadius: "4px", width: "100%" }}>
+          <button style={{ borderRadius: "4px", width: "100%" }}
+            onClick={nextStep}>
             Next Day
           </button>
         </div>

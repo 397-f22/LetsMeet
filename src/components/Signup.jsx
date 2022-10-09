@@ -3,7 +3,7 @@ import Date from "./Date";
 import FormStepper from "./FormStepper";
 import Login from "./Login";
 
-const Signup = () => {
+const Signup = ({ event }) => {
   const [state, setState] = useState({
     step: 0,
     username: "",
@@ -19,6 +19,8 @@ const Signup = () => {
   const nextStep = () => {
     const { step } = state;
     setState({ step: step + 1 });
+
+
   };
 
   // Handle fields change
@@ -33,7 +35,7 @@ const Signup = () => {
   return (
     <FormStepper step={state.step}>
       <Login handleChange={handleChange} nextStep={nextStep} values={values} />
-      <Date day={"Monday"} />
+      <Date day={1} prevStep={prevStep} nextStep={nextStep} />
     </FormStepper>
   );
 };
