@@ -11,7 +11,7 @@ const meetingLengths = [
 ];
 
 const Suggestion = () => {
-  const participants = Object.keys(staticData.events[0].participants);
+  const participants = Object.keys(staticData.events.event1.participants);
   const allDays = [...days];
   const allParticipants = [...participants];
 
@@ -19,9 +19,12 @@ const Suggestion = () => {
   const [daysState, setDaysState] = useState(allDays);
   const [membersState, setMembersState] = useState(allParticipants);
 
-  const goodMeetingTimes = generateMeetingTimes(staticData.events[0].participants,
-                                          meetingLengthState, 
-                                          membersState, daysState);
+  const goodMeetingTimes = generateMeetingTimes(
+    staticData.events.event1.participants,
+    meetingLengthState,
+    membersState,
+    daysState
+  );
 
   //console.log(meetingLengthState);
   //console.log(daysState);
@@ -153,7 +156,9 @@ const Suggestion = () => {
                       defaultChecked={true}
                       onClick={() => {
                         membersState.includes(participant)
-                          ? setMembersState(membersState.filter((x) => x !== participant))
+                          ? setMembersState(
+                              membersState.filter((x) => x !== participant)
+                            )
                           : setMembersState([...membersState, participant]);
                       }}
                     />
@@ -167,11 +172,19 @@ const Suggestion = () => {
       </div>
       <div>
         <h3>Suggested Times:</h3>
-        <div> {/* suggested time cards */
-          (goodMeetingTimes.length === 0)
-          ? <p>No meeting times meet the given criteria.</p>
-          : goodMeetingTimes.map((time_info) => <TimeSuggestion meeting_info={time_info}/>)
-        }</div>
+        <div>
+          {' '}
+          {
+            /* suggested time cards */
+            goodMeetingTimes.length === 0 ? (
+              <p>No meeting times meet the given criteria.</p>
+            ) : (
+              goodMeetingTimes.map((time_info) => (
+                <TimeSuggestion meeting_info={time_info} />
+              ))
+            )
+          }
+        </div>
       </div>
     </div>
   );
