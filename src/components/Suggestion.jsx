@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import * as staticData from '../staticData/events.json';
 import { days } from '../utilities/filter';
+import TimeSuggestion from './TimeSuggestion';
+import { generateMeetingTimes } from '../utilities/filter';
 
 const meetingLengths = [
   { display: '30 min', length: 1 },
@@ -15,9 +17,9 @@ const Suggestion = () => {
   const [daysState, setDaysState] = useState([]);
   const [membersState, setMembersState] = useState([]);
 
-  console.log(meetingLengthState);
-  console.log(daysState);
-  console.log(membersState);
+  //console.log(meetingLengthState);
+  //console.log(daysState);
+  //console.log(membersState);
 
   return (
     <div className="container">
@@ -92,7 +94,7 @@ const Suggestion = () => {
                       type="checkbox"
                       onClick={() => {
                         daysState.includes(day)
-                          ? daysState.filter((x) => x !== day)
+                          ? setDaysState(daysState.filter((x) => x !== day))
                           : setDaysState([...daysState, day]);
                       }}
                     />
@@ -147,14 +149,19 @@ const Suggestion = () => {
                 </button>
               </div>
               <div className="modal-body">
-                {participants.map((p) => (
-                  <div key={p}>
+                {participants.map((participant, idx) => (
+                  <div key={idx}>
                     <input
                       style={{ marginRight: '5px' }}
-                      id={p}
+                      id={participant}
                       type="checkbox"
+                      onClick={() => {
+                        membersState.includes(participant)
+                          ? setMembersState(membersState.filter((x) => x !== participant))
+                          : setMembersState([...membersState, participant]);
+                      }}
                     />
-                    <label htmlFor={p}>{p}</label>
+                    <label htmlFor={participant}>{participant}</label>
                   </div>
                 ))}
               </div>
@@ -176,7 +183,13 @@ const Suggestion = () => {
       </div>
       <div>
         <h3>Suggested Times:</h3>
-        <div>{/* suggested time cards */}</div>
+        <div> {/* suggested time cards */
+          generateMeetingTimes(staticData.events[0].participants,
+                                meetingLengthState, 
+                                membersState, daysState).map((time_info) => {
+            return <TimeSuggestion meeting_info={time_info}/>
+          })
+        }</div>
       </div>
     </div>
   );

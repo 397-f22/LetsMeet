@@ -57,6 +57,10 @@ export const generateMeetingTimes = (
     }
   });
 
+  console.log(requestedLength); 
+  console.log(requestedDays); 
+  console.log(requiredMembers);
+  console.log(result); 
   return result;
 };
 
