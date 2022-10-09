@@ -1,21 +1,96 @@
 import React from "react";
+import { useState } from "react";
 
-const Date = ({ day }) => {
-  const Continue = (e) => {
-    e.preventDefault();
-    nextStep();
-  };
 
-  const Previous = (e) => {
-    e.preventDefault();
-    prevStep();
-  };
+const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
+
+  const dbTimes = meetingData.events.event1.participants["Max"]
+  
+  // Offsets (for DB to Selected conversion)
+
+  const Offsets = { 
+    "M": 0, 
+    "Tu": 48, 
+    "W": 96, 
+    "Th": 144, 
+    "F": 192, 
+    "Sa": 240, 
+    "Su": 288
+  }
+
+  const filteredDBTimes = (databaseTimes) => {
+    const filteredDbTimes = databaseTimes.filter((time) => {
+      Offsets <= time && Offsets + 48 > time
+    })
+    return filteredDbTimes
+  }
+
+  console.log(filteredDBTimes(dbTimes))
+
+  // Example databaseTimes = [18, 19, 20, 21]
+  // Expected return: [0, 1]
+  const DBtoSelected = (databaseTimes) => {
+    const filteredTimes = dbTimes.filter((time) => time % 2 == 0); 
+    return filteredTimes.map((time) => ((time - Offsets[day]) / 2) - 9)
+  }
+
+  // Monday selected = [0] --> DBTIME = [48 + (i + 9) * 2, 48 + (i + 9) * 2 + 1]
+  const SelectedtoDB = (selected) => { 
+    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]); 
+    var b = []
+    for(var i = 0; i < selected.length; i++){
+      b.push(reverseTimes[i])
+      b.push(reverseTimes[i] + 1)
+    }
+    return b
+  }
+
+  const updateMeetingData = () => {
+    meetingData.events.event1.participants["Max"] = SelectedtoDB(selected)
+  }
+
+  // 1. Initialize selected
+  // selected = transform(participants.participant)
+  
+
+  // 2. When the user selects 'Next Day'or 'Previous Day' or submit
+  // participants.participant = ReverseTransform(selected)
+
+  const [selected, setSelected] = useState(DBtoSelected(dbTimes));
+  // setSelected(DBtoSelected(dbTimes))
+
+  console.log(SelectedtoDB(DBtoSelected(dbTimes)));
+
+  
 
   const timeOptions = [];
 
   for (let i = 0; i < 9; i++) {
     timeOptions.push(`${i + 9}:00`);
   }
+
+  // console.log("Event is", event.events.event1.dayOption[day])
+
+
+  const style = {
+    width: "100%",
+    height: "50px",
+    borderRadius: "5px"
+  }
+
+  const TimeBlock = ({ time, idx }) => {
+    <div className="card "
+      onClick={() => setSelected(toggle(idx, selected))}
+      key={idx}
+      style={style}
+    >
+      {time}
+
+    </div>
+  }
+
+  const toggle = (x, lst) =>
+    lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst]
 
   return (
     <div
@@ -36,17 +111,20 @@ const Date = ({ day }) => {
         }}
       >
         {timeOptions.map((time, idx) => (
-          <button
+            <div className="card "
+            onClick={() => setSelected(toggle(idx, selected))}
             key={idx}
-            style={{
-              width: "100%",
-              height: "50px",
-              borderRadius: "5px",
-            }}
+            style={{ backgroundColor: 
+                (selected.includes(idx))
+                ? 'lightgreen'
+                 : 'white',}}
           >
             {time}
-          </button>
-        ))}
+
+          </div>
+        )
+
+        )}
       </div>
       <div
         style={{
@@ -65,14 +143,21 @@ const Date = ({ day }) => {
             width: "100%",
           }}
         >
-          <button style={{ borderRadius: "4px", width: "100%" }}>
+          <button style={{ borderRadius: "4px", width: "100%" }}
+            onClick={ () => {
+              prevStep(); updateMeetingData();
+              }}>
             Previous Day
           </button>
-          <button style={{ borderRadius: "4px", width: "100%" }}>
+          <button style={{ borderRadius: "4px", width: "100%" }}
+            onClick={() => {
+              nextStep(); updateMeetingData();
+            }}>
             Next Day
           </button>
         </div>
-        <button style={{ borderRadius: "4px", padding: "0px 20px" }}>
+        <button style={{ borderRadius: "4px", padding: "0px 20px" }}
+          onClick={updateMeetingData()}>
           Submit
         </button>
       </div>

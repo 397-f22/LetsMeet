@@ -1,25 +1,10 @@
 {
-  "events": [
-    {
-      "eventId": 1,
-      "name": "CS 397 Meeting",
-      "participants": ["A", "B", "C"],
-      "time": "10:10-11:30",
-      "location": "Tech LR1"
-    },
-    {
-      "eventId": 2,
-      "name": "Math Meeting",
-      "participants": ["D", "E", "F"],
-      "time": "16:10-18:30",
-      "location": "Tech LR2"
-    },
-    {
-      "eventId": 3,
-      "name": "Soc 101 Meeting",
-      "participants": ["H", "G"],
-      "time": "12:10-15:30",
-      "location": "Tech LR3"
+  "events": {
+    "event1": {
+      "name": "classP1",
+      "location": "tech",
+      "dayOption" : ["M", "W"],
+      "participants": {"Max": [18, 19, 20, 21]}
     }
-  ]
+  }
 }

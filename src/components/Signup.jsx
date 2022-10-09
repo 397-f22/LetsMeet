@@ -3,8 +3,9 @@ import Date from "./Date";
 import FormStepper from "./FormStepper";
 import Login from "./Login";
 
-const Signup = () => {
+const Signup = ({ event }) => {
   const [state, setState] = useState({
+    day: 0,
     step: 0,
     username: "",
   });
@@ -12,13 +13,15 @@ const Signup = () => {
   // go back to previous step
   const prevStep = () => {
     const { step } = state;
-    setState({ step: step - 1 });
+    console.log("PrevStep Current day is set to ", day)
+    setState({ step: step - 1, day: day - 1 });
+    console.log("PrevStep Current day is now set to ", day)
   };
 
   // proceed to the next step
   const nextStep = () => {
     const { step } = state;
-    setState({ step: step + 1 });
+    setState({ step: step + 1, day: day + 1});
   };
 
   // Handle fields change
@@ -26,14 +29,16 @@ const Signup = () => {
     setState({ [input]: e.target.value });
   };
 
-  const { step } = state;
+  const { step, day } = state;
   const { username } = state;
   const values = { username };
 
   return (
     <FormStepper step={state.step}>
       <Login handleChange={handleChange} nextStep={nextStep} values={values} />
-      <Date day={"Monday"} />
+      {event.events.event1.dayOption.map(([day]) => {
+        return <Date day={day} key={day} prevStep={prevStep} nextStep={nextStep} meetingData={event} />
+      })}
     </FormStepper>
   );
 };
