@@ -1,17 +1,23 @@
-import { useState } from 'react';
-import './App.css';
-import EventComponent from './EventComponent';
-import edata from './staticData/events.json';
-import Signup from './components/Signup';
-import data from './staticData/events.json';
+import { useState } from "react";
+import "./App.css";
+import Signup from "./components/Signup";
+import Suggestion from "./components/Suggestion";
+import { data } from "./staticData/events";
 
 const style = {
-  backgroundColor: 'red',
+  backgroundColor: "red",
 };
 
-console.log('json', data);
+console.log("json", data);
 const App = () => {
-  return <Signup event={data} />;
+  const [showFilter, setShowFilter] = useState(false);
+  const openFilter = () => setShowFilter(true);
+
+  return showFilter ? (
+    <Suggestion data={data} />
+  ) : (
+    <Signup event={data} openFilter={openFilter} />
+  );
 };
 
 export default App;

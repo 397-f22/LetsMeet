@@ -1,57 +1,63 @@
 import React from "react";
 import { useState } from "react";
 
+const Date = ({
+  day,
+  prevStep,
+  nextStep,
+  meetingData,
+  participantName,
+  openFilter,
+}) => {
+  const dbTimes = meetingData.events.event1.participants[participantName];
+  console.log(dbTimes);
 
-const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
-
-  const dbTimes = meetingData.events.event1.participants["Max"]
-  
   // Offsets (for DB to Selected conversion)
 
-  const Offsets = { 
-    "M": 0, 
-    "Tu": 48, 
-    "W": 96, 
-    "Th": 144, 
-    "F": 192, 
-    "Sa": 240, 
-    "Su": 288
-  }
+  const Offsets = {
+    Su: 0,
+    M: 48,
+    Tu: 96,
+    W: 144,
+    Th: 192,
+    F: 240,
+    Sa: 288,
+  };
 
   const filteredDBTimes = (databaseTimes) => {
     const filteredDbTimes = databaseTimes.filter((time) => {
-      Offsets <= time && Offsets + 48 > time
-    })
-    return filteredDbTimes
-  }
+      Offsets <= time && Offsets + 48 > time;
+    });
+    return filteredDbTimes;
+  };
 
-  console.log(filteredDBTimes(dbTimes))
+  console.log(filteredDBTimes(dbTimes));
 
   // Example databaseTimes = [18, 19, 20, 21]
   // Expected return: [0, 1]
   const DBtoSelected = (databaseTimes) => {
-    const filteredTimes = dbTimes.filter((time) => time % 2 == 0); 
-    return filteredTimes.map((time) => ((time - Offsets[day]) / 2) - 9)
-  }
+    const filteredTimes = dbTimes.filter((time) => time % 2 == 0);
+    return filteredTimes.map((time) => (time - Offsets[day]) / 2 - 9);
+  };
 
   // Monday selected = [0] --> DBTIME = [48 + (i + 9) * 2, 48 + (i + 9) * 2 + 1]
-  const SelectedtoDB = (selected) => { 
-    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]); 
-    var b = []
-    for(var i = 0; i < selected.length; i++){
-      b.push(reverseTimes[i])
-      b.push(reverseTimes[i] + 1)
+  const SelectedtoDB = (selected) => {
+    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]);
+    var b = [];
+    for (var i = 0; i < selected.length; i++) {
+      b.push(reverseTimes[i]);
+      b.push(reverseTimes[i] + 1);
     }
-    return b
-  }
+    return b;
+  };
 
   const updateMeetingData = () => {
-    meetingData.events.event1.participants["Max"] = SelectedtoDB(selected)
-  }
+    meetingData.events.event1.participants[participantName] =
+      SelectedtoDB(selected);
+  };
 
   // 1. Initialize selected
   // selected = transform(participants.participant)
-  
 
   // 2. When the user selects 'Next Day'or 'Previous Day' or submit
   // participants.participant = ReverseTransform(selected)
@@ -61,8 +67,6 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
 
   console.log(SelectedtoDB(DBtoSelected(dbTimes)));
 
-  
-
   const timeOptions = [];
 
   for (let i = 0; i < 9; i++) {
@@ -71,26 +75,25 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
 
   // console.log("Event is", event.events.event1.dayOption[day])
 
-
   const style = {
     width: "100%",
     height: "50px",
-    borderRadius: "5px"
-  }
+    borderRadius: "5px",
+  };
 
   const TimeBlock = ({ time, idx }) => {
-    <div className="card "
+    <div
+      className="card "
       onClick={() => setSelected(toggle(idx, selected))}
       key={idx}
       style={style}
     >
       {time}
-
-    </div>
-  }
+    </div>;
+  };
 
   const toggle = (x, lst) =>
-    lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst]
+    lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst];
 
   return (
     <div
@@ -111,20 +114,17 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
         }}
       >
         {timeOptions.map((time, idx) => (
-            <div className="card "
+          <div
+            className="card "
             onClick={() => setSelected(toggle(idx, selected))}
             key={idx}
-            style={{ backgroundColor: 
-                (selected.includes(idx))
-                ? 'lightgreen'
-                 : 'white',}}
+            style={{
+              backgroundColor: selected.includes(idx) ? "lightgreen" : "white",
+            }}
           >
             {time}
-
           </div>
-        )
-
-        )}
+        ))}
       </div>
       <div
         style={{
@@ -143,21 +143,32 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
             width: "100%",
           }}
         >
-          <button style={{ borderRadius: "4px", width: "100%" }}
-            onClick={ () => {
-              prevStep(); updateMeetingData();
-              }}>
+          <button
+            style={{ borderRadius: "4px", width: "100%" }}
+            onClick={() => {
+              prevStep();
+              updateMeetingData();
+            }}
+          >
             Previous Day
           </button>
-          <button style={{ borderRadius: "4px", width: "100%" }}
+          <button
+            style={{ borderRadius: "4px", width: "100%" }}
             onClick={() => {
-              nextStep(); updateMeetingData();
-            }}>
+              nextStep();
+              updateMeetingData();
+            }}
+          >
             Next Day
           </button>
         </div>
-        <button style={{ borderRadius: "4px", padding: "0px 20px" }}
-          onClick={updateMeetingData()}>
+        <button
+          style={{ borderRadius: "4px", padding: "0px 20px" }}
+          onClick={() => {
+            updateMeetingData();
+            openFilter();
+          }}
+        >
           Submit
         </button>
       </div>

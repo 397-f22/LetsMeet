@@ -1,17 +1,16 @@
-import { useState } from 'react';
-import * as staticData from '../staticData/events.json';
-import { days } from '../utilities/filter';
-import TimeSuggestion from './TimeSuggestion';
-import { generateMeetingTimes } from '../utilities/filter';
+import { useState } from "react";
+import { days } from "../utilities/filter";
+import TimeSuggestion from "./TimeSuggestion";
+import { generateMeetingTimes } from "../utilities/filter";
 
 const meetingLengths = [
-  { display: '30 min', length: 1 },
-  { display: '1 hr', length: 2 },
-  { display: '2 hrs', length: 4 },
+  { display: "30 min", length: 1 },
+  { display: "1 hr", length: 2 },
+  { display: "2 hrs", length: 4 },
 ];
 
-const Suggestion = () => {
-  const participants = Object.keys(staticData.events.event1.participants);
+const Suggestion = ({ data }) => {
+  const participants = Object.keys(data.events.event1.participants);
   const allDays = [...days];
   const allParticipants = [...participants];
 
@@ -20,7 +19,7 @@ const Suggestion = () => {
   const [membersState, setMembersState] = useState(allParticipants);
 
   const goodMeetingTimes = generateMeetingTimes(
-    staticData.events.event1.participants,
+    data.events.event1.participants,
     meetingLengthState,
     membersState,
     daysState
@@ -35,7 +34,7 @@ const Suggestion = () => {
       <h1>Filter Time Slots</h1>
       <div
         id="filter-bar"
-        style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}
+        style={{ display: "flex", justifyContent: "center", gap: "10px" }}
       >
         <div className="dropdown">
           <button
@@ -98,7 +97,7 @@ const Suggestion = () => {
                 {days.map((day, idx) => (
                   <div key={idx}>
                     <input
-                      style={{ marginRight: '5px' }}
+                      style={{ marginRight: "5px" }}
                       id={day}
                       type="checkbox"
                       defaultChecked={true}
@@ -150,7 +149,7 @@ const Suggestion = () => {
                 {participants.map((participant, idx) => (
                   <div key={idx}>
                     <input
-                      style={{ marginRight: '5px' }}
+                      style={{ marginRight: "5px" }}
                       id={participant}
                       type="checkbox"
                       defaultChecked={true}
@@ -173,7 +172,7 @@ const Suggestion = () => {
       <div>
         <h3>Suggested Times:</h3>
         <div>
-          {' '}
+          {" "}
           {
             /* suggested time cards */
             goodMeetingTimes.length === 0 ? (

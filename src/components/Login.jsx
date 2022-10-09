@@ -1,6 +1,6 @@
 import React from "react";
 
-const Login = ({ handleChange, values, nextStep }) => {
+const Login = ({ handleChange, values, nextStep, openFilter }) => {
   return (
     <div
       style={{
@@ -17,7 +17,7 @@ const Login = ({ handleChange, values, nextStep }) => {
           padding: "20px",
         }}
       >
-        Robotics Club Meeting
+        Swarm Meeting 3
       </h1>
       <label>
         Name
@@ -41,6 +41,7 @@ const Login = ({ handleChange, values, nextStep }) => {
             backgroundColor: "#414BB2",
             color: "white",
           }}
+          onClick={openFilter}
         >
           Find Times
         </button>
