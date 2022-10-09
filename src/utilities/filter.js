@@ -1,4 +1,4 @@
-export const filter = (
+export const generateMeetingTimes = (
   data,
   requestedLength,
   requiredMembers,
@@ -9,67 +9,89 @@ export const filter = (
   //   <username2>: [...],
   //   ...
   // }
-
+  //
+  // requestedDays: [
+  //   'Sunday',
+  //   'Monday',
+  //   'Tuesday',
+  //   'Wednesday',
+  //   'Thursday',
+  //   'Friday',
+  //   'Saturday',
+  // ];
+  //
   // requestedLength in units of timeslots
-
-  const data = {
-    name1: [0, 1, 2, 3, 4, 5, 7],
-    name2: [3, 4, 5, 10, 11],
-    name3: [4, 5, 11, 12, 13],
-  };
-
-  const numParticipants = Object.keys(data).length;
+  //
+  // const data = {
+  //   name1: [0, 1, 2, 3, 4, 5, 7],
+  //   name2: [3, 4, 5, 10, 11],
+  //   name3: [4, 5, 11, 12, 13],
+  // };
 
   let buckets = Array(48 * 7)
     .fill()
     .map(() => Array(0));
 
   Object.entries(data).map(([username, arr]) => {
-    console.log(username);
-    console.log(arr);
     arr.forEach((v) => {
       buckets[v].push(username);
     });
   });
 
-  let count2buckets = Array(numParticipants + 1)
-    .fill()
-    .map(() => Array(0));
-  buckets.forEach((arr, i) => {
-    count2buckets[arr.length].append(i);
+  let result = [];
+  buckets.forEach((participants, startTime) => {
+    if (
+      isMeetingTimeOkay(
+        buckets,
+        requestedLength,
+        startTime,
+        requiredMembers,
+        requestedDays
+      )
+    ) {
+      result.push({
+        participants: participants,
+        startTime: startTime,
+        endTime: startTime + requestedLength - 1,
+      });
+    }
   });
 
-  const slotHasMembers = (slot, members) => {
-    if (slot >= buckets.length) return false;
-    return members.every((member) => buckets[slot].includes(member));
-  };
+  return result;
+};
 
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+const days = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
-  const encodeDay = (day) => days.findIndex(day);
+const slotHasMembers = (buckets, slot, members) => {
+  if (slot >= buckets.length) return false;
+  return members.every((member) => buckets[slot].includes(member));
+};
 
-  const isSelectedDay = (slot, day) => Math.floor(slot / 48) === encodeDay(day);
+const encodeDay = (day) => days.findIndex((v) => day === v);
 
-  const isSelectedDays = (slot, days) =>
-    days.some((day) => isSelectedDay(slot, day));
+const isSelectedDay = (slot, day) => Math.floor(slot / 48) === encodeDay(day);
 
-  const isMeetingTimeOkay = (startTime, members, days) => {
-    for (let slot = startTime; slot < startTime + requestedLength; slot++) {
-      if (!(slotHasMembers(slot, members) && isSelectedDays(slot, days)))
-        return false;
-    }
-    return true;
-  };
+const isSelectedDays = (slot, days) =>
+  days.some((day) => isSelectedDay(slot, day));
 
-  return buckets.filter((members, startTime) =>
-    isMeetingTimeOkay(startTime, requiredMembers, requestedDays)
-  );
+const isMeetingTimeOkay = (
+  buckets,
+  requestedLength,
+  startTime,
+  members,
+  days
+) => {
+  for (let slot = startTime; slot < startTime + requestedLength; slot++) {
+    if (!(slotHasMembers(buckets, slot, members) && isSelectedDays(slot, days)))
+      return false;
+  }
+  return true;
 };
