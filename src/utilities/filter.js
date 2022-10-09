@@ -1,9 +1,11 @@
-export const filter = (data, requestedLength) => {
+export const filter = (data, requestedLength, requiredMembers) => {
   // data: {
   //   <username1>: [0, 1, 2, 10, 11, 12, 13, 21, 22, 23], // buckets
   //   <username2>: [...],
   //   ...
   // }
+
+  // requestedLength in units of timeslots
 
   const data = {
     name1: [0, 1, 2, 3, 4, 5, 7],
@@ -13,15 +15,30 @@ export const filter = (data, requestedLength) => {
 
   const numParticipants = Object.keys(data).length;
 
-  let buckets = Array(48 * 7).fill([]);
+  let buckets = Array(48*7).fill().map(() => Array(0));
+
   Object.entries(data).map(([username, arr]) => {
-    arr.forEach((v) => {
-      buckets[v].append(username);
+    console.log(username);
+    console.log(arr); 
+    arr.forEach((v) => {   
+      buckets[v].push(username);
     });
   });
 
-  let count2buckets = Array(numParticipants + 1).fill([]);
+  let count2buckets = Array(numParticipants+1).fill().map(() => Array(0));
   buckets.forEach((arr, i) => {
     count2buckets[arr.length].append(i);
   });
+
+  const slotHasMembers = (slot, members) => {
+    members.every((member) => buckets[slot].includes(member));  
+  }
+
+  const timeSlotOkay = (startingSlot) => {
+    for (let slot = startingSlot; slot < requestedLength; slot++) {
+      
+    }
+  }
+
+
 };
