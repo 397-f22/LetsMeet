@@ -12,10 +12,16 @@ const meetingLengths = [
 
 const Suggestion = () => {
   const participants = Object.keys(staticData.events[0].participants);
+  const allDays = [...days];
+  const allParticipants = [...participants];
 
   const [meetingLengthState, setMeetingLengthState] = useState(1);
-  const [daysState, setDaysState] = useState([]);
-  const [membersState, setMembersState] = useState([]);
+  const [daysState, setDaysState] = useState(allDays);
+  const [membersState, setMembersState] = useState(allParticipants);
+
+  const goodMeetingTimes = generateMeetingTimes(staticData.events[0].participants,
+                                          meetingLengthState, 
+                                          membersState, daysState);
 
   //console.log(meetingLengthState);
   //console.log(daysState);
@@ -92,6 +98,7 @@ const Suggestion = () => {
                       style={{ marginRight: '5px' }}
                       id={day}
                       type="checkbox"
+                      defaultChecked={true}
                       onClick={() => {
                         daysState.includes(day)
                           ? setDaysState(daysState.filter((x) => x !== day))
@@ -101,18 +108,6 @@ const Suggestion = () => {
                     <label htmlFor={day}>{day}</label>
                   </div>
                 ))}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
               </div>
             </div>
           </div>
@@ -155,6 +150,7 @@ const Suggestion = () => {
                       style={{ marginRight: '5px' }}
                       id={participant}
                       type="checkbox"
+                      defaultChecked={true}
                       onClick={() => {
                         membersState.includes(participant)
                           ? setMembersState(membersState.filter((x) => x !== participant))
@@ -165,18 +161,6 @@ const Suggestion = () => {
                   </div>
                 ))}
               </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -184,11 +168,9 @@ const Suggestion = () => {
       <div>
         <h3>Suggested Times:</h3>
         <div> {/* suggested time cards */
-          generateMeetingTimes(staticData.events[0].participants,
-                                meetingLengthState, 
-                                membersState, daysState).map((time_info) => {
-            return <TimeSuggestion meeting_info={time_info}/>
-          })
+          (goodMeetingTimes.length === 0)
+          ? <p>No meeting times meet the given criteria.</p>
+          : goodMeetingTimes.map((time_info) => <TimeSuggestion meeting_info={time_info}/>)
         }</div>
       </div>
     </div>

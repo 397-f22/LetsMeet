@@ -3,7 +3,6 @@ import { slot2time, slot2dayIdx } from '../utilities/time';
 import { days } from '../utilities/filter';
 
 const TimeSuggestion = ({ meeting_info }) => {
-  console.log('asdf');
   console.log(meeting_info);
   return (
     <div className="card m-1 p-2">
