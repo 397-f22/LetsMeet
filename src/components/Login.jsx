@@ -30,7 +30,7 @@ const Login = ({ handleChange, values, nextStep }) => {
           type="text"
           placeholder="Enter username here"
           value={values.username}
-          onChange={handleChange("username")}
+          onChange={(e) => handleChange(e.currentTarget.value)}
         />
       </label>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
