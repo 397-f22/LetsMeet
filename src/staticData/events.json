@@ -3,8 +3,8 @@
     "event1": {
       "name": "classP1",
       "location": "tech",
-      "dayOption" : ["M", "W"],
-      "participants": {"Max": [18, 19, 20, 21]}
+      "dayOption": ["M", "W"],
+      "participants": { "Max": [18, 19, 20, 21] }
     }
   }
 }
