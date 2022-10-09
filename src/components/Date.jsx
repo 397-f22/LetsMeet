@@ -1,8 +1,13 @@
 import React from "react";
+import { useState } from "react";
 
 const Date = ({ day, prevStep, nextStep, event }) => {
 
 
+  const [selected, setSelected] = useState([]);
+
+
+  console.log(selected);
 
   const timeOptions = [];
 
@@ -12,6 +17,30 @@ const Date = ({ day, prevStep, nextStep, event }) => {
 
   console.log("Event is", event.events.event1.dayOption[day])
 
+
+  const style = {
+    width: "100%",
+    height: "50px",
+    borderRadius: "5px"
+    // backgroundColor: 
+    //   selectState
+    //     ? 'lightgreen'
+    //     : 'white',
+  }
+
+  const TimeBlock = ({ time, idx }) => {
+    <div className="card "
+      onClick={() => setSelected(toggle(idx, selected))}
+      key={idx}
+      style={style}
+    >
+      {time}
+
+    </div>
+  }
+
+  const toggle = (x, lst) =>
+    lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst]
 
   return (
     <div
@@ -31,18 +60,9 @@ const Date = ({ day, prevStep, nextStep, event }) => {
           gap: "1rem",
         }}
       >
-        {timeOptions.map((time, idx) => (
-          <button
-            key={idx}
-            style={{
-              width: "100%",
-              height: "50px",
-              borderRadius: "5px",
-            }}
-          >
-            {time}
-          </button>
-        ))}
+        {timeOptions.map((time, idx) => (<TimeBlock key={idx} time={time} idx={idx}></TimeBlock>)
+        
+        )}
       </div>
       <div
         style={{

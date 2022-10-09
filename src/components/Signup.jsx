@@ -37,7 +37,7 @@ const Signup = ({ event }) => {
     <FormStepper step={state.step}>
       <Login handleChange={handleChange} nextStep={nextStep} values={values} />
       {event.events.event1.dayOption.map(([day]) => {
-        return <Date day={day} prevStep={prevStep} nextStep={nextStep} event={event} />
+        return <Date day={day} key={day} prevStep={prevStep} nextStep={nextStep} event={event} />
       })}
     </FormStepper>
   );
