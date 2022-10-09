@@ -4,7 +4,7 @@
       "name": "classP1",
       "location": "tech",
       "dayOption" : ["M", "W"],
-      "participants": {}
+      "participants": {"Max": [18, 19, 20, 21]}
     }
   }
 }

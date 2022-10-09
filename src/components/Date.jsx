@@ -1,13 +1,49 @@
 import React from "react";
 import { useState } from "react";
 
-const Date = ({ day, prevStep, nextStep, event }) => {
 
+const Date = ({ day, prevStep, nextStep, meetingData, participantName}) => {
 
-  const [selected, setSelected] = useState([]);
+  const dbTimes = meetingData.events.event1.participants["Max"]
+  
+  // Offsets (for DB to Selected conversion)
 
+  const Offsets = { 
+    "M": 0, 
+    "Tu": 48, 
+    "W": 96, 
+    "Th": 144, 
+    "F": 192, 
+    "Sa": 240, 
+    "Su": 288
+  }
 
-  console.log(selected);
+  // Example databaseTimes = [18, 19, 20, 21]
+  // Expected return: [0, 1]
+  const DBtoSelected = (databaseTimes) => {
+    const filteredTimes = dbTimes.filter((time) => time % 2 == 0); 
+    return filteredTimes.map((time) => (time / 2) - 9 - Offsets[day])
+  }
+
+  // Monday selected = [0] --> DBTIME = [48 + (i + 9) * 2, 48 + (i + 9) * 2 + 1]
+  const SelectedtoDB = (selected) => { 
+    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]); 
+    return reverseTimes.map()
+  }
+
+  // 1. Initialize selected
+  // selected = transform(participants.participant)
+  
+
+  // 2. When the user selects 'Next Day'or 'Previous Day' or submit
+  // participants.participant = ReverseTransform(selected)
+
+  const [selected, setSelected] = useState([DBtoSelected(dbTimes)]);
+  // setSelected(DBtoSelected(dbTimes))
+
+  console.log(DBtoSelected(dbTimes));
+
+  
 
   const timeOptions = [];
 
@@ -15,17 +51,13 @@ const Date = ({ day, prevStep, nextStep, event }) => {
     timeOptions.push(`${i + 9}:00`);
   }
 
-  console.log("Event is", event.events.event1.dayOption[day])
+  // console.log("Event is", event.events.event1.dayOption[day])
 
 
   const style = {
     width: "100%",
     height: "50px",
     borderRadius: "5px"
-    // backgroundColor: 
-    //   selectState
-    //     ? 'lightgreen'
-    //     : 'white',
   }
 
   const TimeBlock = ({ time, idx }) => {
@@ -60,8 +92,20 @@ const Date = ({ day, prevStep, nextStep, event }) => {
           gap: "1rem",
         }}
       >
-        {timeOptions.map((time, idx) => (<TimeBlock key={idx} time={time} idx={idx}></TimeBlock>)
-        
+        {timeOptions.map((time, idx) => (
+            <div className="card "
+            onClick={() => setSelected(toggle(idx, selected))}
+            key={idx}
+            style={{ backgroundColor: 
+                (selected.includes(idx))
+                ? 'lightgreen'
+                 : 'white',}}
+          >
+            {time}
+
+          </div>
+        )
+
         )}
       </div>
       <div
