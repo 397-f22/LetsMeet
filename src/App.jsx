@@ -9,11 +9,9 @@ const style = {
   backgroundColor: 'red',
 };
 
-console.log("json", data)
+console.log('json', data);
 const App = () => {
-  return (
-    <Signup event={data}/>
-  );
+  return <Signup event={data} />;
 };
 
 export default App;
