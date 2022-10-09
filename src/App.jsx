@@ -13,7 +13,7 @@ const style = {
 console.log("json", data)
 const App = () => {
   return (
-    <Signup dates={data}/>
+    <Signup event={data}/>
   );
 };
 

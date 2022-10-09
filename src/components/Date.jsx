@@ -1,6 +1,6 @@
 import React from "react";
 
-const Date = ({ day, prevStep, nextStep }) => {
+const Date = ({ day, prevStep, nextStep, event }) => {
 
 
 
@@ -9,6 +9,8 @@ const Date = ({ day, prevStep, nextStep }) => {
   for (let i = 0; i < 9; i++) {
     timeOptions.push(`${i + 9}:00`);
   }
+
+  console.log("Event is", event.events.event1.dayOption[day])
 
 
   return (
