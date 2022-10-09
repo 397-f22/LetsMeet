@@ -60,7 +60,7 @@ export const generateMeetingTimes = (
   return result;
 };
 
-const days = [
+export const days = [
   'Sunday',
   'Monday',
   'Tuesday',
