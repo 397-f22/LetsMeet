@@ -128,12 +128,16 @@ const Date = ({
           alignItems: "center",
           gap: "1rem",
           textAlign: "center",
+          overflow: "auto",
+          padding: "20px",
+          width: "100%",
+          height: "100%",
         }}
       >
         {timeOptions.map((time, idx) => (
           <button
             onClick={() => setSelected(toggle(idx, selected))}
-            className="shadow-lg"
+            className="shadow"
             key={idx}
             style={{
               backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
@@ -174,7 +178,7 @@ const Date = ({
               color: "white",
               border: "none",
             }}
-            className="shadow-md"
+            className="shadow-sm"
             onClick={() => {
               prevStep();
               updateMeetingData();
@@ -191,7 +195,7 @@ const Date = ({
               color: "white",
               border: "none",
             }}
-            className="shadow-md"
+            className="shadow-sm"
             onClick={() => {
               nextStep();
               updateMeetingData();
@@ -208,7 +212,7 @@ const Date = ({
             color: "white",
             border: "none",
           }}
-          className="shadow-md"
+          className="shadow-sm"
           onClick={() => {
             updateMeetingData();
             openFilter();

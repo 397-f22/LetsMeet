@@ -16,7 +16,10 @@ const TimeSuggestion = ({ meeting_info }) => {
       </div>
       <div className="card-body" style={{ margin: 0, padding: 0 }}>
         <p>Participants</p>
-        <div className="participants" style={{ display: "flex", gap: "5px" }}>
+        <div
+          className="participants"
+          style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}
+        >
           {meeting_info.participants.map((p, idx) => (
             <div
               key={idx}

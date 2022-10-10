@@ -21,6 +21,7 @@ Icon
 
 #production
 /build
+/dist
 
 # IDE folders
 .vscode/*
