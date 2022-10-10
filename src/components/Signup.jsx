@@ -13,9 +13,7 @@ const Signup = ({ event, openFilter }) => {
   // go back to previous step
   const prevStep = () => {
     const { step } = state;
-    console.log("PrevStep Current day is set to ", day);
     setState({ ...state, step: step - 1, day: day - 1 });
-    console.log("PrevStep Current day is now set to ", day);
   };
 
   // proceed to the next step
@@ -32,7 +30,6 @@ const Signup = ({ event, openFilter }) => {
   const { step, day } = state;
   const { username } = state;
   const values = { username };
-  console.log(state);
 
   return (
     <FormStepper step={state.step}>

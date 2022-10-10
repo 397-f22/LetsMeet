@@ -57,21 +57,17 @@ export const generateMeetingTimes = (
     }
   });
 
-  console.log(requestedLength); 
-  console.log(requestedDays); 
-  console.log(requiredMembers);
-  console.log(result); 
   return result;
 };
 
 export const days = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 const slotHasMembers = (buckets, slot, members) => {

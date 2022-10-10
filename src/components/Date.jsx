@@ -10,7 +10,6 @@ const Date = ({
   openFilter,
 }) => {
   const dbTimes = meetingData.events.event1.participants[participantName];
-  console.log(dbTimes);
 
   // Offsets (for DB to Selected conversion)
 
@@ -30,8 +29,6 @@ const Date = ({
     });
     return filteredDbTimes;
   };
-
-  console.log(filteredDBTimes(dbTimes));
 
   // Example databaseTimes = [18, 19, 20, 21]
   // Expected return: [0, 1]
@@ -65,15 +62,11 @@ const Date = ({
   const [selected, setSelected] = useState(DBtoSelected(dbTimes));
   // setSelected(DBtoSelected(dbTimes))
 
-  console.log(SelectedtoDB(DBtoSelected(dbTimes)));
-
   const timeOptions = [];
 
   for (let i = 0; i < 9; i++) {
     timeOptions.push(`${i + 9}:00`);
   }
-
-  // console.log("Event is", event.events.event1.dayOption[day])
 
   const style = {
     width: "100%",

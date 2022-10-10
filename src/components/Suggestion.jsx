@@ -25,10 +25,6 @@ const Suggestion = ({ data }) => {
     daysState
   );
 
-  //console.log(meetingLengthState);
-  //console.log(daysState);
-  //console.log(membersState);
-
   return (
     <div className="container">
       <h1>Filter Time Slots</h1>
