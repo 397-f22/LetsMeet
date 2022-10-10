@@ -26,8 +26,15 @@ const Suggestion = ({ data }) => {
   );
 
   return (
-    <div className="container">
-      <h1>Filter Time Slots</h1>
+    <div
+      className="container"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h1 style={{ padding: "20px" }}>Find Times</h1>
       <div
         id="filter-bar"
         style={{ display: "flex", justifyContent: "center", gap: "10px" }}
@@ -35,6 +42,7 @@ const Suggestion = ({ data }) => {
         <div className="dropdown">
           <button
             type="button"
+            style={{ backgroundColor: "#576e93", border: "none" }}
             className="btn btn-primary dropdown-toggle"
             id="meetingLength"
             data-toggle="dropdown"
@@ -60,6 +68,7 @@ const Suggestion = ({ data }) => {
         </div>
         <button
           type="button"
+          style={{ backgroundColor: "#576e93", border: "none" }}
           className="btn btn-primary"
           data-toggle="modal"
           data-target="#dayModal"
@@ -112,6 +121,7 @@ const Suggestion = ({ data }) => {
         </div>
         <button
           type="button"
+          style={{ backgroundColor: "#576e93", border: "none" }}
           className="btn btn-primary"
           data-toggle="modal"
           data-target="#memberModal"
@@ -165,18 +175,42 @@ const Suggestion = ({ data }) => {
           </div>
         </div>
       </div>
-      <div>
-        <h3>Suggested Times:</h3>
+      <div style={{ width: "100%", padding: "1rem" }}>
         <div>
-          {" "}
           {
             /* suggested time cards */
             goodMeetingTimes.length === 0 ? (
-              <p>No meeting times meet the given criteria.</p>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                }}
+              >
+                <p style={{ fontSize: "18px" }}>
+                  No meeting times meet the given criteria.
+                </p>
+                <span style={{ fontSize: "12px" }}>
+                  Try broadening your search!
+                </span>
+              </div>
             ) : (
-              goodMeetingTimes.map((time_info) => (
-                <TimeSuggestion meeting_info={time_info} />
-              ))
+              <>
+                <h2 className="py-2">Suggested Times:</h2>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                  }}
+                >
+                  {goodMeetingTimes.map((time_info, idx) => (
+                    <TimeSuggestion key={idx} meeting_info={time_info} />
+                  ))}
+                </div>
+              </>
             )
           }
         </div>

@@ -23,6 +23,18 @@ const Date = ({
     Sa: 288,
   };
 
+  const dayNameMap = {
+    Su: "Sunday",
+    M: "Monday",
+    Tu: "Tuesday",
+    W: "Wednesday",
+    Th: "Thursday",
+    F: "Friday",
+    Sa: "Saturday",
+  };
+
+  const mapDayToFullName = (day) => dayNameMap[day];
+
   const filteredDBTimes = (databaseTimes) => {
     const filteredDbTimes = databaseTimes.filter((time) => {
       Offsets <= time && Offsets + 48 > time;
@@ -94,29 +106,46 @@ const Date = ({
         display: "grid",
         gridTemplateRows: "10% 70% 20%",
         height: "100vh",
-        justifyContent: "center",
+        width: "100%",
+        alignItems: "center",
+        padding: "5%",
+        textAlign: "center",
       }}
     >
-      <h1 style={{ padding: "20px" }}>Select {day} Availability </h1>
+      <h1
+        style={{
+          width: "100%",
+          padding: "20px",
+        }}
+      >
+        <span style={{ color: "#A8B8D2" }}>{mapDayToFullName(day)}</span>{" "}
+        Availability
+      </h1>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           gap: "1rem",
+          textAlign: "center",
         }}
       >
         {timeOptions.map((time, idx) => (
-          <div
-            className="card "
+          <button
             onClick={() => setSelected(toggle(idx, selected))}
+            className="shadow-lg"
             key={idx}
             style={{
-              backgroundColor: selected.includes(idx) ? "lightgreen" : "white",
+              backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
+              width: "100%",
+              padding: "10px 40px",
+              borderRadius: "8px",
+              border: "none",
+              transition: "background-color 300ms ease-in-out",
             }}
           >
             {time}
-          </div>
+          </button>
         ))}
       </div>
       <div
@@ -137,7 +166,15 @@ const Date = ({
           }}
         >
           <button
-            style={{ borderRadius: "4px", width: "100%" }}
+            style={{
+              backgroundColor: "#576e93",
+              borderRadius: "4px",
+              width: "100%",
+              padding: "2px 20px",
+              color: "white",
+              border: "none",
+            }}
+            className="shadow-md"
             onClick={() => {
               prevStep();
               updateMeetingData();
@@ -146,7 +183,15 @@ const Date = ({
             Previous Day
           </button>
           <button
-            style={{ borderRadius: "4px", width: "100%" }}
+            style={{
+              backgroundColor: "#576e93",
+              borderRadius: "4px",
+              width: "100%",
+              padding: "2px 20px",
+              color: "white",
+              border: "none",
+            }}
+            className="shadow-md"
             onClick={() => {
               nextStep();
               updateMeetingData();
@@ -156,7 +201,14 @@ const Date = ({
           </button>
         </div>
         <button
-          style={{ borderRadius: "4px", padding: "0px 20px" }}
+          style={{
+            backgroundColor: "#576e93",
+            borderRadius: "4px",
+            padding: "2px 20px",
+            color: "white",
+            border: "none",
+          }}
+          className="shadow-md"
           onClick={() => {
             updateMeetingData();
             openFilter();

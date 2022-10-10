@@ -6,7 +6,8 @@ const Login = ({ handleChange, values, nextStep, openFilter }) => {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "15rem",
+        justifyContent: "space-around",
+        height: "100vh",
         alignItems: "center",
       }}
     >
@@ -38,9 +39,11 @@ const Login = ({ handleChange, values, nextStep, openFilter }) => {
           style={{
             borderRadius: "4px",
             padding: "5px 40px",
-            backgroundColor: "#414BB2",
+            backgroundColor: "#576e93",
             color: "white",
+            border: "none",
           }}
+          className="shadow-md"
           onClick={openFilter}
         >
           Find Times
@@ -49,9 +52,11 @@ const Login = ({ handleChange, values, nextStep, openFilter }) => {
           style={{
             borderRadius: "4px",
             padding: "5px 40px",
-            backgroundColor: "#414BB2",
+            backgroundColor: "#576e93",
             color: "white",
+            border: "none",
           }}
+          className="shadow-md"
           onClick={nextStep}
         >
           Select Times
