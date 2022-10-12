@@ -15,7 +15,7 @@ const TimeSuggestion = ({ meeting_info }) => {
         </h3>
       </div>
       <div className="card-body" style={{ margin: 0, padding: 0 }}>
-        <p>Participants</p>
+        <p>Available Participants</p>
         <div
           className="participants"
           style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}

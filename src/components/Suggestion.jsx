@@ -1,25 +1,32 @@
-import { useState } from "react";
-import { days } from "../utilities/filter";
-import TimeSuggestion from "./TimeSuggestion";
-import { generateMeetingTimes } from "../utilities/filter";
+import { useEffect, useState } from 'react';
+import { days } from '../utilities/filter';
+import TimeSuggestion from './TimeSuggestion';
+import { generateMeetingTimes } from '../utilities/filter';
+import { useRtdbData } from '../utilities/firebase';
 
 const meetingLengths = [
-  { display: "30 min", length: 1 },
-  { display: "1 hr", length: 2 },
-  { display: "2 hrs", length: 4 },
+  { display: '30 min', length: 1 },
+  { display: '1 hr', length: 2 },
+  { display: '2 hrs', length: 4 },
 ];
 
-const Suggestion = ({ data }) => {
-  const participants = Object.keys(data.events.event1.participants);
-  const allDays = [...days];
-  const allParticipants = [...participants];
+const Suggestion = () => {
+  const [data, isLoading] = useRtdbData('events/event1');
+
+  const participants = Object.keys(data?.participants || {});
 
   const [meetingLengthState, setMeetingLengthState] = useState(1);
-  const [daysState, setDaysState] = useState(allDays);
-  const [membersState, setMembersState] = useState(allParticipants);
+  const [daysState, setDaysState] = useState([...days]);
+  const [membersState, setMembersState] = useState([...participants]);
+
+  useEffect(() => {
+    setMembersState(participants);
+  }, [isLoading]);
+
+  if (isLoading) return <div>loading...</div>;
 
   const goodMeetingTimes = generateMeetingTimes(
-    data.events.event1.participants,
+    data.participants,
     meetingLengthState,
     membersState,
     daysState
@@ -29,20 +36,20 @@ const Suggestion = ({ data }) => {
     <div
       className="container"
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
-      <h1 style={{ padding: "20px" }}>Find Times</h1>
+      <h1 style={{ padding: '20px' }}>Find Times</h1>
       <div
         id="filter-bar"
-        style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+        style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}
       >
         <div className="dropdown">
           <button
             type="button"
-            style={{ backgroundColor: "#576e93", border: "none" }}
+            style={{ backgroundColor: '#576e93', border: 'none' }}
             className="btn btn-primary dropdown-toggle"
             id="meetingLength"
             data-toggle="dropdown"
@@ -68,7 +75,7 @@ const Suggestion = ({ data }) => {
         </div>
         <button
           type="button"
-          style={{ backgroundColor: "#576e93", border: "none" }}
+          style={{ backgroundColor: '#576e93', border: 'none' }}
           className="btn btn-primary"
           data-toggle="modal"
           data-target="#dayModal"
@@ -102,7 +109,7 @@ const Suggestion = ({ data }) => {
                 {days.map((day, idx) => (
                   <div key={idx}>
                     <input
-                      style={{ marginRight: "5px" }}
+                      style={{ marginRight: '5px' }}
                       id={day}
                       type="checkbox"
                       defaultChecked={true}
@@ -121,7 +128,7 @@ const Suggestion = ({ data }) => {
         </div>
         <button
           type="button"
-          style={{ backgroundColor: "#576e93", border: "none" }}
+          style={{ backgroundColor: '#576e93', border: 'none' }}
           className="btn btn-primary"
           data-toggle="modal"
           data-target="#memberModal"
@@ -155,7 +162,7 @@ const Suggestion = ({ data }) => {
                 {participants.map((participant, idx) => (
                   <div key={idx}>
                     <input
-                      style={{ marginRight: "5px" }}
+                      style={{ marginRight: '5px' }}
                       id={participant}
                       type="checkbox"
                       defaultChecked={true}
@@ -175,24 +182,24 @@ const Suggestion = ({ data }) => {
           </div>
         </div>
       </div>
-      <div style={{ width: "100%", padding: "1rem" }}>
+      <div style={{ width: '100%', padding: '1rem' }}>
         <div>
           {
             /* suggested time cards */
             goodMeetingTimes.length === 0 ? (
               <div
                 style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  textAlign: "center",
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  textAlign: 'center',
                 }}
               >
-                <p style={{ fontSize: "18px" }}>
+                <p style={{ fontSize: '18px' }}>
                   No meeting times meet the given criteria.
                 </p>
-                <span style={{ fontSize: "12px" }}>
+                <span style={{ fontSize: '12px' }}>
                   Try broadening your search!
                 </span>
               </div>
@@ -201,9 +208,9 @@ const Suggestion = ({ data }) => {
                 <h2 className="py-2">Suggested Times:</h2>
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
                   }}
                 >
                   {goodMeetingTimes.map((time_info, idx) => (
