@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function TimeBox({ startTime, endTime, granularity }) {
   const numTimeSlots = (endTime - startTime) / granularity;
   const timeSlots = [];
@@ -8,10 +10,11 @@ export default function TimeBox({ startTime, endTime, granularity }) {
       <div
         style={{
           borderBottom: "solid 1px black",
-          backgroundColor: "lightblue",
-          height: "5rem",
+          backgroundColor: "lightblue"
         }}
-      ></div>
+        key={i}
+        onMouseDown={(e)=>console.log(e)}
+      >{i}</div>
     );
   }
   return (
