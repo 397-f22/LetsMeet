@@ -1,13 +1,24 @@
-import React, { useState } from "react";
-import Date from "./Date";
-import FormStepper from "./FormStepper";
-import Login from "./Login";
+import React, { useState } from 'react';
+import Date from './Date';
+import FormStepper from './FormStepper';
+import Login from './Login';
 
-const Signup = ({ event, openFilter }) => {
+const Signup = () => {
+  return (
+    <div className="container">
+      <h1>LetsMeet</h1>
+      <div>New Meeting</div>
+      <div>Description</div>
+      <div>Days of a Week</div>
+    </div>
+  );
+};
+
+const SignupOld = ({ event, openFilter }) => {
   const [state, setState] = useState({
     day: 0,
     step: 0,
-    username: "",
+    username: '',
   });
 
   // go back to previous step
@@ -48,7 +59,7 @@ const Signup = ({ event, openFilter }) => {
             nextStep={nextStep}
             meetingData={event}
             openFilter={openFilter}
-            participantName={values.username || "unknown"}
+            participantName={values.username || 'unknown'}
           />
         );
       })}
