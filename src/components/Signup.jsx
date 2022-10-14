@@ -4,6 +4,8 @@ import FormStepper from './FormStepper';
 import Login from './Login';
 import { useDbUpdate } from '../utilities/firebase';
 import { useFormData } from '../utilities/useFormData';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const validateUserData = (key, val) => {
   switch (key) {
@@ -21,31 +23,31 @@ const InputField = ({name, text, state, change}) => (
 );
 
 const ButtonBar = ({message, disabled}) => {
-  const navigate = useNavigate();
   return (
     <div className="d-flex">
-      <button type="button" className="btn btn-outline-dark me-2" onClick={() => navigate(-1)}>Cancel</button>
       <button type="submit" className="btn btn-primary me-auto" disabled={disabled}>Submit</button>
       <span className="p-2">{message}</span>
     </div>
   );
 };
 
-const SignupEditor = ({ event }) => {
+const SignupEditor = ({ }) => {
+  const eventId = uuidv4(); 
   const [update, result] = useDbUpdate(`/event/${eventId}`);
-  const [state, change] = useFormData(validateUserData, user);
+  const [state, change] = useFormData(validateUserData);
   const submit = (evt) => {
     evt.preventDefault();
     if (!state.errors) {
       update(state.values);
     }
   };
-  <form onSubmit={submit} className={state.errors ? 'was-validated' : null}>
-    <InputField name="meetingName" text="meetingName" state={state} change={change}/>
-    <InputField name="description" text="optional" state={state} change={change}/>
-        
-    <ButtonBar message={result.message}/>
-  </form>
+  return (
+    <form onSubmit={submit} className={state.errors ? 'was-validated' : null}>
+      <InputField name="meetingName" text="Meeting Name" state={state} change={change}/>
+      <InputField name="description" text="Description" state={state} change={change}/>
+      <ButtonBar message=""/>
+    </form>
+  );
 }
 
 const Signup = () => {
