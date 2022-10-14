@@ -3,18 +3,8 @@ import Date from './Date';
 import FormStepper from './FormStepper';
 import Login from './Login';
 
-const Signup = () => {
-  return (
-    <div className="container">
-      <h1>LetsMeet</h1>
-      <div>New Meeting</div>
-      <div>Description</div>
-      <div>Days of a Week</div>
-    </div>
-  );
-};
 
-const SignupOld = ({ event, openFilter }) => {
+const Signup = ({ event, openFilter }) => {
   const [state, setState] = useState({
     day: 0,
     step: 0,
