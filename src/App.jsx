@@ -4,7 +4,7 @@ import './App.css';
 import Signup from './components/Signup';
 import Suggestion from './components/Suggestion';
 import { data } from './staticData/events';
-
+import Administrative from './components/Administrative';
 const App = () => {
   const [showFilter, setShowFilter] = useState(false);
   const openFilter = () => setShowFilter(true);
@@ -14,7 +14,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={<Signup event={data} openFilter={openFilter} />}
+          element={<Administrative />}
         />
         <Route path="/events/:eventId" element={<Suggestion />} />
       </Routes>
