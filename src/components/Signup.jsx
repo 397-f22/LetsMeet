@@ -2,13 +2,57 @@ import React, { useState } from 'react';
 import Date from './Date';
 import FormStepper from './FormStepper';
 import Login from './Login';
+import { useDbUpdate } from '../utilities/firebase';
+import { useFormData } from '../utilities/useFormData';
+
+const validateUserData = (key, val) => {
+  switch (key) {
+    default: return '';
+  }
+};
+
+const InputField = ({name, text, state, change}) => (
+  <div className="mb-3">
+    <label htmlFor={name} className="form-label">{text}</label>
+    <input className="form-control" id={name} name={name} 
+      defaultValue={state.values?.[name]} onChange={change} />
+    <div className="invalid-feedback">{state.errors?.[name]}</div>
+  </div>
+);
+
+const ButtonBar = ({message, disabled}) => {
+  const navigate = useNavigate();
+  return (
+    <div className="d-flex">
+      <button type="button" className="btn btn-outline-dark me-2" onClick={() => navigate(-1)}>Cancel</button>
+      <button type="submit" className="btn btn-primary me-auto" disabled={disabled}>Submit</button>
+      <span className="p-2">{message}</span>
+    </div>
+  );
+};
+
+const SignupEditor = ({ event }) => {
+  const [update, result] = useDbUpdate(`/event/${eventId}`);
+  const [state, change] = useFormData(validateUserData, user);
+  const submit = (evt) => {
+    evt.preventDefault();
+    if (!state.errors) {
+      update(state.values);
+    }
+  };
+  <form onSubmit={submit} className={state.errors ? 'was-validated' : null}>
+    <InputField name="meetingName" text="meetingName" state={state} change={change}/>
+    <InputField name="description" text="optional" state={state} change={change}/>
+        
+    <ButtonBar message={result.message}/>
+  </form>
+}
 
 const Signup = () => {
   return (
     <div className="container">
       <h1>LetsMeet</h1>
-      <div>New Meeting</div>
-      <div>Description</div>
+      <SignupEditor/>
       <div>Days of a Week</div>
     </div>
   );
