@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { days } from '../utilities/filter';
 import TimeSuggestion from './TimeSuggestion';
 import { generateMeetingTimes } from '../utilities/filter';
@@ -11,7 +12,8 @@ const meetingLengths = [
 ];
 
 const Suggestion = () => {
-  const [data, isLoading] = useRtdbData('events/event1');
+  const { eventId } = useParams();
+  const [data, isLoading] = useRtdbData(`events/${eventId}`);
 
   const participants = Object.keys(data?.participants || {});
 

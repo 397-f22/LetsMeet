@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Signup from './components/Signup';
 import Suggestion from './components/Suggestion';
@@ -8,10 +9,16 @@ const App = () => {
   const [showFilter, setShowFilter] = useState(false);
   const openFilter = () => setShowFilter(true);
 
-  return showFilter ? (
-    <Suggestion />
-  ) : (
-    <Signup event={data} openFilter={openFilter} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Signup event={data} openFilter={openFilter} />}
+        />
+        <Route path="/events/:eventId" element={<Suggestion />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
