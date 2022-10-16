@@ -5,15 +5,43 @@ export default function TimeBox({ startTime, endTime, granularity }) {
   const timeSlots = [];
   const [selected, setSelected] = useState([]);
 
+
+
+  const [mouseDown, setMouseDown] = useState(false)
+  window.onmousedown = () => {
+    setMouseDown(true)
+  }
+  window.onmouseup = () => {
+    setMouseDown(false)
+  }
+
   for (let i = 0; i < numTimeSlots; i++) {
     timeSlots.push(
       <div
         style={{
           borderBottom: "solid 1px black",
-          backgroundColor: "lightblue"
+          backgroundColor: selected.includes(i) ? 'green' : 'lightblue'
         }}
         key={i}
-        onMouseDown={(e)=>console.log(e)}
+        onMouseDown={(e) => {
+          // console.log(e);
+          setSelected(toggle(i, selected))
+          // console.log(selected)
+        }
+        }
+        onMouseOver={(e) => {
+          if (mouseDown) {
+            setSelected(toggle(i, selected))
+          }
+          // console.log(e)
+        }
+        }
+        onMouseUp={(e) => {
+          setMouseDown(false)
+          console.log(selected)
+        }
+        }
+
       >{i}</div>
     );
   }
@@ -31,3 +59,18 @@ export default function TimeBox({ startTime, endTime, granularity }) {
     </div>
   );
 }
+
+
+
+const toggle = (x, lst) =>
+  lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst];
+
+
+const selectFromHere = (event) => {
+  return event;
+}
+
+const selectToHere = (event) => {
+  return event;
+}
+
