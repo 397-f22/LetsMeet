@@ -81,7 +81,7 @@ const Signup = () => {
 };
 
 const Administrative = (handleChange, values, Signup) => {
-  const weekDays = ['M', 'Tu', 'W', 'TH', 'Fr', 'Sa', 'Su'];
+  const weekDays = ['M', 'Tu', 'W', 'Th', 'Fr', 'Sa', 'Su'];
   const startHours = [
     '00',
     '01',
@@ -138,17 +138,19 @@ const Administrative = (handleChange, values, Signup) => {
   const [meetingNameState, setMeetingNameState] = useState();
   const [descriptionState, setDescriptionState] = useState();
   const [daysState, setDaysState] = useState([]);
-  const [startState, setStartState] = useState();
-  const [endState, setEndState] = useState();
+  const [startState, setStartState] = useState('09');
+  const [endState, setEndState] = useState('10');
 
-  const toggleSelected = (item) => setDaysState(
-    daysState.includes(item)
-    ? daysState.filter(x => x !== item)
-    : [...daysState, item]
-  );
+  const toggleSelected = (item) =>
+    setDaysState(
+      daysState.includes(item)
+        ? daysState.filter((x) => x !== item)
+        : [...daysState, item]
+    );
 
-  
-  console.log(daysState)
+  console.log(daysState);
+  console.log(startState);
+  console.log(endState);
 
   return (
     <div
@@ -181,7 +183,7 @@ const Administrative = (handleChange, values, Signup) => {
           type="text"
           placeholder="Meeting Name"
           value={values.username}
-          onChange={(e) => { 
+          onChange={(e) => {
             setMeetingNameState(e.currentTarget.value);
           }}
         />
@@ -198,7 +200,7 @@ const Administrative = (handleChange, values, Signup) => {
           placeholder="Optional"
           value={values.username}
           onChange={(e) => {
-          setDescriptionState(e.currentTarget.value);
+            setDescriptionState(e.currentTarget.value);
           }}
         />
       </label>
@@ -206,14 +208,14 @@ const Administrative = (handleChange, values, Signup) => {
       <div className="daySelector" style={{ display: 'flex' }}>
         {weekDays.map((day) => (
           <div
+            key={day}
             className="daySelectorTile"
             style={{
               width: '2.5rem',
               border: '1px solid #000000',
               textAlign: 'center',
-            }
-          }
-          onChange={() => {toggleSelected({day}); console.log('Test');}}
+            }}
+            onClick={() => toggleSelected({ day })}
           >
             {day}
           </div>
@@ -222,24 +224,35 @@ const Administrative = (handleChange, values, Signup) => {
 
       <div style={{ display: 'flex', gap: '3rem' }}>
         <div>
-          Start
-          <div>
-            <select>
+          <label>
+            Start
+            <select
+              value={startState}
+              onChange={(e) => {
+                // console.log(e.target.value);
+                setStartState(e.target.value);
+              }}
+            >
               {startHours.map((h) => (
                 <option value={h}>{h} </option>
               ))}
             </select>
-          </div>
+          </label>
         </div>
         <div>
-          End
-          <div>
-            <select>
-              {startHours.map((h) => (
+          <label>
+            End
+            <select
+              value={endState}
+              onChange={(e) => {
+                setEndState(e.target.value);
+              }}
+            >
+              {endHours.map((h) => (
                 <option value={h}>{h} </option>
               ))}
             </select>
-          </div>
+          </label>
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
