@@ -70,15 +70,6 @@ const SignupEditor = ({}) => {
   );
 };
 
-const Signup = () => {
-  return (
-    <div className="container">
-      <h1>LetsMeet</h1>
-      <SignupEditor />
-      <div>Days of a Week</div>
-    </div>
-  );
-};
 
 const Administrative = (handleChange, values, Signup) => {
   const weekDays = ['M', 'Tu', 'W', 'Th', 'Fr', 'Sa', 'Su'];
@@ -140,17 +131,33 @@ const Administrative = (handleChange, values, Signup) => {
   const [daysState, setDaysState] = useState([]);
   const [startState, setStartState] = useState('09');
   const [endState, setEndState] = useState('10');
+  const eventId = uuidv4();
+  const [update, result] = useDbUpdate(`/event/${eventId}`);
 
-  const toggleSelected = (item) =>
+
+
+  const dbUpdateMeetingState = (meetingState) => {
+    const updateState = (stateVar) => {
+      if (!state.errors) {
+        update(state.values);
+      }
+    };
+    Object.entries(meetingState).map(updateState);
+  }
+  
+  const toggleSelected = ({day}) => {
     setDaysState(
-      daysState.includes(item)
-        ? daysState.filter((x) => x !== item)
-        : [...daysState, item]
+      daysState.includes(day)
+        ? daysState.filter((x) => x !== day)
+        : [...daysState, day]
     );
+  }
 
   console.log(daysState);
   console.log(startState);
   console.log(endState);
+  console.log(meetingNameState); 
+  console.log(descriptionState);
 
   return (
     <div
@@ -233,8 +240,8 @@ const Administrative = (handleChange, values, Signup) => {
                 setStartState(e.target.value);
               }}
             >
-              {startHours.map((h) => (
-                <option value={h}>{h} </option>
+              {startHours.map((h, id) => (
+                <option key={id} value={h}>{h} </option>
               ))}
             </select>
           </label>
@@ -248,8 +255,8 @@ const Administrative = (handleChange, values, Signup) => {
                 setEndState(e.target.value);
               }}
             >
-              {endHours.map((h) => (
-                <option value={h}>{h} </option>
+              {endHours.map((h, id) => (
+                <option key={id} value={h}>{h} </option>
               ))}
             </select>
           </label>
@@ -265,7 +272,7 @@ const Administrative = (handleChange, values, Signup) => {
             border: 'none',
           }}
           className="shadow-md"
-          onClick={Signup}
+          onClick={() => dbUpdateMeetingState({meetingNameState, descriptionState, daysState, startState, endState})}
         >
           Create Meeting
         </button>
