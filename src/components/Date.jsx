@@ -138,8 +138,10 @@ const Date = ({
       >
       
       <div className="scroller">
-        <TimeBox startTime={0} endTime={12} granularity={1} />
-        <TimeBox startTime={12} endTime={24} granularity={1} />
+        <div className="frames"><TimeBox  startTime={0} endTime={12} granularity={1} /></div>
+        <div className="frames"><TimeBox  startTime={12} endTime={24} granularity={1} /></div>
+        
+        
       </div>
          
       </div>

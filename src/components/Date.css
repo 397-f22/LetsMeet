@@ -1,8 +1,17 @@
 .scroller {
-    display: grid,
+    /* width: 20%; */
+    display: flex;
+    
+}
 
+.frames{
+    margin: 10px;
+    width: 100px;
 }
 
 .box {
-    background-color: red;
+
+    border-radius: 10px;
+ 
+    
 }

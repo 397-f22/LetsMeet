@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import './Date.css'
+
 export default function TimeBox({ startTime, endTime, granularity }) {
   const numTimeSlots = (endTime - startTime) / granularity;
   const timeSlots = [];
@@ -33,7 +35,7 @@ export default function TimeBox({ startTime, endTime, granularity }) {
           if (mouseDown) {
             setSelected(toggle(i, selected))
           }
-           console.log(e)
+          //  console.log(e)
         }
         }
         onMouseUp={(e) => {
