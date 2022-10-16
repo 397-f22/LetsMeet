@@ -137,9 +137,18 @@ const Administrative = (handleChange, values, Signup) => {
 
   const [meetingNameState, setMeetingNameState] = useState();
   const [descriptionState, setDescriptionState] = useState();
-  const [daysState, setDaysState] = useState();
+  const [daysState, setDaysState] = useState([]);
   const [startState, setStartState] = useState();
   const [endState, setEndState] = useState();
+
+  const toggleSelected = (item) => setDaysState(
+    daysState.includes(item)
+    ? daysState.filter(x => x !== item)
+    : [...daysState, item]
+  );
+
+  
+  console.log(daysState)
 
   return (
     <div
@@ -172,7 +181,9 @@ const Administrative = (handleChange, values, Signup) => {
           type="text"
           placeholder="Meeting Name"
           value={values.username}
-          onChange={(e) => handleChange(e.currentTarget.value)}
+          onChange={(e) => { 
+            setMeetingNameState(e.currentTarget.value);
+          }}
         />
       </label>
       <label>
@@ -186,7 +197,9 @@ const Administrative = (handleChange, values, Signup) => {
           type="text"
           placeholder="Optional"
           value={values.username}
-          onChange={(e) => handleChange(e.currentTarget.value)}
+          onChange={(e) => {
+          setDescriptionState(e.currentTarget.value);
+          }}
         />
       </label>
 
@@ -198,7 +211,9 @@ const Administrative = (handleChange, values, Signup) => {
               width: '2.5rem',
               border: '1px solid #000000',
               textAlign: 'center',
-            }}
+            }
+          }
+          onChange={() => {toggleSelected({day}); console.log('Test');}}
           >
             {day}
           </div>
