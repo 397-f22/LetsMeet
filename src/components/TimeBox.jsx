@@ -15,25 +15,25 @@ export default function TimeBox({ startTime, endTime, granularity }) {
     setMouseDown(false)
   }
 
-  for (let i = 0; i < numTimeSlots; i++) {
+  for (let i = startTime; i < numTimeSlots + startTime; i++) {
     timeSlots.push(
-      <div
+      <div className="box"
         style={{
           borderBottom: "solid 1px black",
           backgroundColor: selected.includes(i) ? 'green' : 'lightblue'
         }}
         key={i}
         onMouseDown={(e) => {
-          // console.log(e);
+          console.log(e);
           setSelected(toggle(i, selected))
-          // console.log(selected)
+          //console.log(selected)
         }
         }
         onMouseOver={(e) => {
           if (mouseDown) {
             setSelected(toggle(i, selected))
           }
-          // console.log(e)
+           console.log(e)
         }
         }
         onMouseUp={(e) => {

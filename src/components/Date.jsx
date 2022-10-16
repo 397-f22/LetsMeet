@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import TimeBox from "./TimeBox";
+import './Date.css'
 
 const Date = ({
   day,
@@ -134,23 +136,12 @@ const Date = ({
           height: "100%",
         }}
       >
-        {timeOptions.map((time, idx) => (
-          <button
-            onClick={() => setSelected(toggle(idx, selected))}
-            className="shadow"
-            key={idx}
-            style={{
-              backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
-              width: "100%",
-              padding: "10px 40px",
-              borderRadius: "8px",
-              border: "none",
-              transition: "background-color 300ms ease-in-out",
-            }}
-          >
-            {time}
-          </button>
-        ))}
+      
+      <div className="scroller">
+        <TimeBox startTime={0} endTime={12} granularity={1} />
+        <TimeBox startTime={12} endTime={24} granularity={1} />
+      </div>
+         
       </div>
       <div
         style={{

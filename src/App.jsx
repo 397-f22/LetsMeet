@@ -9,11 +9,12 @@ const App = () => {
   const [showFilter, setShowFilter] = useState(false);
   const openFilter = () => setShowFilter(true);
 
-  return (
-    <div>
-      <TimeBox startTime={0} endTime={12} granularity={1} />;
-    </div>
+  return showFilter ? (
+    <Suggestion />
+  ) : (
+    <Signup event={data} openFilter={openFilter} />
   );
+
 };
 
 export default App;
