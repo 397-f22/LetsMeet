@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Date from "./Date";
-import FormStepper from "./FormStepper";
-import Login from "./Login";
 import { v4 as uuidv4 } from "uuid";
 import { useDbUpdate } from "../utilities/firebase";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Administrative = (handleChange, values, Signup) => {
+const Administrative = () => {
   const weekDays = ["M", "Tu", "W", "Th", "Fr", "Sa", "Su"];
   const startHours = [
     "00",
@@ -135,8 +132,18 @@ const Administrative = (handleChange, values, Signup) => {
       >
         Lets Meet
       </h1>
-      <form id="create-meeting" onSubmit={(e) => onSubmit(e)}>
-        <label>
+      <form
+        id="create-meeting"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          height: "100vh",
+          alignItems: "center",
+        }}
+        onSubmit={(e) => onSubmit(e)}
+      >
+        <label style={{ fontWeight: "bold" }}>
           New Meeting
           <input
             required={true}
@@ -147,13 +154,12 @@ const Administrative = (handleChange, values, Signup) => {
             }}
             type="text"
             placeholder="Meeting Name"
-            value={values.username}
             onChange={(e) => {
               setMeetingNameState(e.currentTarget.value);
             }}
           />
         </label>
-        <label>
+        <label style={{ fontWeight: "bold" }}>
           Description
           <input
             style={{
@@ -163,34 +169,51 @@ const Administrative = (handleChange, values, Signup) => {
             }}
             type="text"
             placeholder="Optional"
-            value={values.username}
             onChange={(e) => {
               setDescriptionState(e.currentTarget.value);
             }}
           />
         </label>
-        <div className="daySelector" style={{ display: "flex" }}>
-          {weekDays.map((day) => (
-            <div
-              key={day}
-              className="daySelectorTile"
-              style={{
-                width: "2.5rem",
-                border: "1px solid #000000",
+        <div className="daySelector">
+          <p style={{ fontWeight: "bold" }}>Days of The Week</p>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            {weekDays.map((day, i) => {
+              let style = {
+                width: "2rem",
+                height: "2rem",
+                lineHeight: "1.8rem",
+                border: "1px solid black",
                 textAlign: "center",
-              }}
-              onClick={() => toggleSelected({ day })}
-            >
-              {day}
-            </div>
-          ))}
+                cursor: "pointer",
+                borderRadius: "50%",
+              };
+              if (daysState.includes(day)) {
+                style = {
+                  ...style,
+                  backgroundColor: "#576e93",
+                  color: "white",
+                };
+              }
+              return (
+                <div
+                  key={day}
+                  className="daySelectorTile"
+                  style={style}
+                  onClick={() => toggleSelected({ day })}
+                >
+                  {day}
+                </div>
+              );
+            })}
+          </div>
         </div>
         {daysError && <p>You must select at least one day</p>}
         <div style={{ display: "flex", gap: "3rem" }}>
           <div>
-            <label>
-              Start
+            <label style={{ fontWeight: "bold" }}>
+              Start Time
               <select
+                className="mx-2"
                 required={true}
                 value={startState}
                 onChange={(e) => {
@@ -207,9 +230,10 @@ const Administrative = (handleChange, values, Signup) => {
             </label>
           </div>
           <div>
-            <label>
-              End
+            <label style={{ fontWeight: "bold" }}>
+              End Time
               <select
+                className="mx-2"
                 required={true}
                 value={endState}
                 onChange={(e) => {
@@ -228,7 +252,7 @@ const Administrative = (handleChange, values, Signup) => {
         {startEndError && <p>Start time cannot be greater than end time</p>}
       </form>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div style={{ marginBottom: "5rem" }}>
         <button
           form="create-meeting"
           style={{
