@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import Date from "./Date";
-import FormStepper from "./FormStepper";
-import Login from "./Login";
+import React, { useState } from 'react';
+import Date from './Date';
+import FormStepper from './FormStepper';
+import Login from './Login';
+import { useDbUpdate } from '../utilities/firebase';
+import { useFormData } from '../utilities/useFormData';
+import { v4 as uuidv4 } from 'uuid';
 
 const Signup = ({ event, openFilter }) => {
   const [state, setState] = useState({
     day: 0,
     step: 0,
-    username: "",
+    username: '',
   });
 
   // go back to previous step
@@ -48,7 +51,7 @@ const Signup = ({ event, openFilter }) => {
             nextStep={nextStep}
             meetingData={event}
             openFilter={openFilter}
-            participantName={values.username || "unknown"}
+            participantName={values.username || 'unknown'}
           />
         );
       })}

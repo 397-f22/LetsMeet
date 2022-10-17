@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, set } from 'firebase/database';
+import { update, getDatabase, ref, onValue, set } from 'firebase/database';
+
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBspAveJg8sXsKNcMSeH9EuLC48vbaSmkk',
@@ -29,4 +31,36 @@ export const useRtdbData = (path, dependency) => {
   );
 
   return [data, isLoading];
+};
+
+export const useDbData = (path) => {
+  const [data, setData] = useState();
+  const [error, setError] = useState(null);
+
+  useEffect(() => (
+    onValue(ref(db, path), (snapshot) => {
+     setData( snapshot.val() );
+    }, (error) => {
+      setError(error);
+    })
+  ), [ path ]);
+
+  return [ data, error ];
+};
+
+const makeResult = (error) => {
+  const timestamp = Date.now();
+  const message = error?.message || `Updated: ${new Date(timestamp).toLocaleString()}`;
+  return { timestamp, error, message };
+};
+
+export const useDbUpdate = (path) => {
+  const [result, setResult] = useState();
+  const updateData = useCallback((value) => {
+    update(ref(db, path), value)
+    .then(() => setResult(makeResult()))
+    .catch((error) => setResult(makeResult(error)))
+  }, [db, path]);
+
+  return [updateData, result];
 };
