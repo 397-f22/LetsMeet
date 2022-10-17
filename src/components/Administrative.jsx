@@ -4,10 +4,9 @@ import FormStepper from "./FormStepper";
 import Login from "./Login";
 import { v4 as uuidv4 } from "uuid";
 import { useDbUpdate } from "../utilities/firebase";
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 const Administrative = (handleChange, values, Signup) => {
-  
   const weekDays = ["M", "Tu", "W", "Th", "Fr", "Sa", "Su"];
   const startHours = [
     "00",
@@ -63,15 +62,17 @@ const Administrative = (handleChange, values, Signup) => {
   ];
 
   const [meetingNameState, setMeetingNameState] = useState();
-  const [descriptionState, setDescriptionState] = useState();
+  const [descriptionState, setDescriptionState] = useState("");
   const [daysState, setDaysState] = useState([]);
+  const [daysError, setDaysError] = useState(false);
+  const [startEndError, setStartEndError] = useState(false);
   const [startState, setStartState] = useState("09");
   const [endState, setEndState] = useState("10");
 
   const eventId = uuidv4();
   const [update, result] = useDbUpdate(`/events/${eventId}`);
-  const navigate = useNavigate(); 
-  const navigateToParticipantPage = () => { 
+  const navigate = useNavigate();
+  const navigateToParticipantPage = () => {
     navigate(`events/${eventId}`);
   };
 
@@ -103,6 +104,17 @@ const Administrative = (handleChange, values, Signup) => {
   console.log(meetingNameState);
   console.log(descriptionState);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const isDaySelected = daysState.length;
+    const isStartEndValid = parseInt(startState) < parseInt(endState);
+    if (!isDaySelected) setDaysError(true);
+    if (!isStartEndValid) setStartEndError(true);
+    if (!isDaySelected || !isStartEndValid) return;
+    dbUpdateMeetingState();
+    navigateToParticipantPage();
+  };
+
   return (
     <div
       className="container"
@@ -123,95 +135,102 @@ const Administrative = (handleChange, values, Signup) => {
       >
         Lets Meet
       </h1>
-      <label>
-        New Meeting
-        <input
-          style={{
-            display: "block",
-            borderRadius: "4px",
-            padding: "5px 10px",
-          }}
-          type="text"
-          placeholder="Meeting Name"
-          value={values.username}
-          onChange={(e) => {
-            setMeetingNameState(e.currentTarget.value);
-          }}
-        />
-      </label>
-      <label>
-        Description
-        <input
-          style={{
-            display: "block",
-            borderRadius: "4px",
-            padding: "5px 10px",
-          }}
-          type="text"
-          placeholder="Optional"
-          value={values.username}
-          onChange={(e) => {
-            setDescriptionState(e.currentTarget.value);
-          }}
-        />
-      </label>
-
-      <div className="daySelector" style={{ display: "flex" }}>
-        {weekDays.map((day) => (
-          <div
-            key={day}
-            className="daySelectorTile"
+      <form id="create-meeting" onSubmit={(e) => onSubmit(e)}>
+        <label>
+          New Meeting
+          <input
+            required={true}
             style={{
-              width: "2.5rem",
-              border: "1px solid #000000",
-              textAlign: "center",
+              display: "block",
+              borderRadius: "4px",
+              padding: "5px 10px",
             }}
-            onClick={() => toggleSelected({ day })}
-          >
-            {day}
+            type="text"
+            placeholder="Meeting Name"
+            value={values.username}
+            onChange={(e) => {
+              setMeetingNameState(e.currentTarget.value);
+            }}
+          />
+        </label>
+        <label>
+          Description
+          <input
+            style={{
+              display: "block",
+              borderRadius: "4px",
+              padding: "5px 10px",
+            }}
+            type="text"
+            placeholder="Optional"
+            value={values.username}
+            onChange={(e) => {
+              setDescriptionState(e.currentTarget.value);
+            }}
+          />
+        </label>
+        <div className="daySelector" style={{ display: "flex" }}>
+          {weekDays.map((day) => (
+            <div
+              key={day}
+              className="daySelectorTile"
+              style={{
+                width: "2.5rem",
+                border: "1px solid #000000",
+                textAlign: "center",
+              }}
+              onClick={() => toggleSelected({ day })}
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+        {daysError && <p>You must select at least one day</p>}
+        <div style={{ display: "flex", gap: "3rem" }}>
+          <div>
+            <label>
+              Start
+              <select
+                required={true}
+                value={startState}
+                onChange={(e) => {
+                  // console.log(e.target.value);
+                  setStartState(e.target.value);
+                }}
+              >
+                {startHours.map((h, id) => (
+                  <option key={id} value={h}>
+                    {h}{" "}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
-        ))}
-      </div>
+          <div>
+            <label>
+              End
+              <select
+                required={true}
+                value={endState}
+                onChange={(e) => {
+                  setEndState(e.target.value);
+                }}
+              >
+                {endHours.map((h, id) => (
+                  <option key={id} value={h}>
+                    {h}{" "}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </div>
+        {startEndError && <p>Start time cannot be greater than end time</p>}
+      </form>
 
-      <div style={{ display: "flex", gap: "3rem" }}>
-        <div>
-          <label>
-            Start
-            <select
-              value={startState}
-              onChange={(e) => {
-                // console.log(e.target.value);
-                setStartState(e.target.value);
-              }}
-            >
-              {startHours.map((h, id) => (
-                <option key={id} value={h}>
-                  {h}{" "}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            End
-            <select
-              value={endState}
-              onChange={(e) => {
-                setEndState(e.target.value);
-              }}
-            >
-              {endHours.map((h, id) => (
-                <option key={id} value={h}>
-                  {h}{" "}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      </div>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <button
+          form="create-meeting"
           style={{
             borderRadius: "4px",
             padding: "5px 40px",
@@ -220,7 +239,6 @@ const Administrative = (handleChange, values, Signup) => {
             border: "none",
           }}
           className="shadow-md"
-          onClick={() => {dbUpdateMeetingState(); navigateToParticipantPage()}}
         >
           Create Meeting
         </button>
