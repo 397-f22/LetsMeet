@@ -9,7 +9,9 @@ const Date = ({
   participantName,
   openFilter,
 }) => {
-  const dbTimes = meetingData.events.event1.participants[participantName];
+  const dbTimes = meetingData.participants[participantName];
+  console.log("DB TIMES"); 
+  console.log(dbTimes);
 
   // Offsets (for DB to Selected conversion)
 
@@ -61,7 +63,7 @@ const Date = ({
   };
 
   const updateMeetingData = () => {
-    meetingData.events.event1.participants[participantName] =
+    meetingData.participants[participantName] =
       SelectedtoDB(selected);
   };
 

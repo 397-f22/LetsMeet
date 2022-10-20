@@ -5,8 +5,18 @@ import Login from './Login';
 import { useDbUpdate } from '../utilities/firebase';
 import { useFormData } from '../utilities/useFormData';
 import { v4 as uuidv4 } from 'uuid';
+import { useLocation } from 'react-router-dom'
+import { useRtdbData } from "../utilities/firebase";
 
-const Signup = ({ event, openFilter }) => {
+function HeaderView() {
+  const location = useLocation();
+}
+
+const Signup = ({ openFilter }) => {
+  const pathname = location.pathname; 
+  const event_id = pathname.split('/')[2]; 
+  const [event, loading] = useRtdbData(`events/${event_id}`);
+  
   const [state, setState] = useState({
     day: 0,
     step: 0,
@@ -34,6 +44,7 @@ const Signup = ({ event, openFilter }) => {
   const { username } = state;
   const values = { username };
 
+  if (loading) return <div>loading...</div>;
   return (
     <FormStepper step={state.step}>
       <Login
@@ -42,7 +53,7 @@ const Signup = ({ event, openFilter }) => {
         values={values}
         openFilter={openFilter}
       />
-      {event.events.event1.dayOption.map(([day]) => {
+      {event.dayOptions.map(([day]) => {
         return (
           <Date
             day={day}
