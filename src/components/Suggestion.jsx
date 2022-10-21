@@ -15,14 +15,15 @@ const Suggestion = () => {
   const { eventId } = useParams();
   const [data, isLoading] = useRtdbData(`events/${eventId}`);
 
-  const participants = Object.keys(data?.participants || {});
+  const participantNames = Object.keys(data?.participants || {});
+  const participants = Object.entries(data?.participants || {});
 
   const [meetingLengthState, setMeetingLengthState] = useState(1);
   const [daysState, setDaysState] = useState([...days]);
-  const [membersState, setMembersState] = useState([...participants]);
+  const [membersState, setMembersState] = useState([...participantNames]);
 
   useEffect(() => {
-    setMembersState(participants);
+    setMembersState(participantNames);
   }, [isLoading]);
 
   if (isLoading) return <div>loading...</div>;
@@ -161,7 +162,7 @@ const Suggestion = () => {
                 </button>
               </div>
               <div className="modal-body">
-                {participants.map((participant, idx) => (
+                {participantNames.map((participant, idx) => (
                   <div key={idx}>
                     <input
                       style={{ marginRight: "5px" }}

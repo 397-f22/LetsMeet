@@ -6,17 +6,12 @@ import Suggestion from './components/Suggestion';
 import { data } from './staticData/events';
 import Administrative from './components/Administrative';
 const App = () => {
-  const [showFilter, setShowFilter] = useState(false);
-  const openFilter = () => setShowFilter(true);
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<Administrative />}
-        />
-        <Route path="/events/:eventId" element={<Suggestion />} />
+        <Route path="/" element={<Administrative />} />
+        <Route path="/events/:eventId" element={<Signup />} />
+        <Route path="/events/:eventId/filter" element={<Suggestion />} />
       </Routes>
     </BrowserRouter>
   );

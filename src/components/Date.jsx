@@ -1,68 +1,58 @@
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
+import { useDbUpdate } from '../utilities/firebase';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Date = ({
-  day,
-  prevStep,
-  nextStep,
-  meetingData,
-  participantName,
-  openFilter,
-}) => {
-  const dbTimes = meetingData.events.event1.participants[participantName];
+const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
+  const { eventId } = useParams();
+  const [update, result] = useDbUpdate(
+    `/events/${eventId}/participants/${participantName}`
+  );
+  const navigate = useNavigate();
 
   // Offsets (for DB to Selected conversion)
-
   const Offsets = {
     Su: 0,
     M: 48,
     Tu: 96,
     W: 144,
     Th: 192,
-    F: 240,
+    Fr: 240,
     Sa: 288,
   };
 
   const dayNameMap = {
-    Su: "Sunday",
-    M: "Monday",
-    Tu: "Tuesday",
-    W: "Wednesday",
-    Th: "Thursday",
-    F: "Friday",
-    Sa: "Saturday",
+    Su: 'Sunday',
+    M: 'Monday',
+    Tu: 'Tuesday',
+    W: 'Wednesday',
+    Th: 'Thursday',
+    Fr: 'Friday',
+    Sa: 'Saturday',
   };
 
   const mapDayToFullName = (day) => dayNameMap[day];
 
-  const filteredDBTimes = (databaseTimes) => {
-    const filteredDbTimes = databaseTimes.filter((time) => {
-      Offsets <= time && Offsets + 48 > time;
-    });
-    return filteredDbTimes;
+  const selectedToDB = () => {
+    return selected.map(
+      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day]
+    );
   };
 
-  // Example databaseTimes = [18, 19, 20, 21]
-  // Expected return: [0, 1]
-  const DBtoSelected = (databaseTimes) => {
-    const filteredTimes = dbTimes.filter((time) => time % 2 == 0);
-    return filteredTimes.map((time) => (time - Offsets[day]) / 2 - 9);
-  };
-
-  // Monday selected = [0] --> DBTIME = [48 + (i + 9) * 2, 48 + (i + 9) * 2 + 1]
-  const SelectedtoDB = (selected) => {
-    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]);
-    var b = [];
-    for (var i = 0; i < selected.length; i++) {
-      b.push(reverseTimes[i]);
-      b.push(reverseTimes[i] + 1);
+  const dbToSelected = () => {
+    if (meetingData.participants === undefined) return [];
+    if (meetingData.participants[participantName] !== undefined) {
+      return meetingData.participants[participantName].map(
+        (dbTime) => (dbTime - Offsets[day]) / 2
+      );
+    } else {
+      return [];
     }
-    return b;
   };
 
   const updateMeetingData = () => {
-    meetingData.events.event1.participants[participantName] =
-      SelectedtoDB(selected);
+    const newTimes = selectedToDB();
+    update({ ...newTimes });
   };
 
   // 1. Initialize selected
@@ -71,19 +61,19 @@ const Date = ({
   // 2. When the user selects 'Next Day'or 'Previous Day' or submit
   // participants.participant = ReverseTransform(selected)
 
-  const [selected, setSelected] = useState(DBtoSelected(dbTimes));
-  // setSelected(DBtoSelected(dbTimes))
-
+  const [selected, setSelected] = useState(dbToSelected());
   const timeOptions = [];
+  const startTime = parseInt(meetingData.startTime);
+  const endTime = parseInt(meetingData.endTime);
 
-  for (let i = 0; i < 9; i++) {
-    timeOptions.push(`${i + 9}:00`);
+  for (let i = 0; i < endTime - startTime; i++) {
+    timeOptions.push(`${i + startTime}:00`);
   }
 
   const style = {
-    width: "100%",
-    height: "50px",
-    borderRadius: "5px",
+    width: '100%',
+    height: '50px',
+    borderRadius: '5px',
   };
 
   const TimeBlock = ({ time, idx }) => {
@@ -98,40 +88,44 @@ const Date = ({
   };
 
   const toggle = (x, lst) =>
-    lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst];
+    lst.includes(x)
+      ? lst.filter((y) => y !== x && y !== x + 1 / 2)
+      : [x, x + 1 / 2, ...lst];
+
+  console.log(selected);
 
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateRows: "10% 70% 20%",
-        height: "100vh",
-        width: "100%",
-        alignItems: "center",
-        padding: "5%",
-        textAlign: "center",
+        display: 'grid',
+        gridTemplateRows: '10% 70% 20%',
+        height: '100vh',
+        width: '100%',
+        alignItems: 'center',
+        padding: '5%',
+        textAlign: 'center',
       }}
     >
       <h1
         style={{
-          width: "100%",
-          padding: "20px",
+          width: '100%',
+          padding: '20px',
         }}
       >
-        <span style={{ color: "#A8B8D2" }}>{mapDayToFullName(day)}</span>{" "}
+        <span style={{ color: '#A8B8D2' }}>{mapDayToFullName(day)}</span>{' '}
         Availability
       </h1>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "1rem",
-          textAlign: "center",
-          overflow: "auto",
-          padding: "20px",
-          width: "100%",
-          height: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem',
+          textAlign: 'center',
+          overflow: 'auto',
+          padding: '20px',
+          width: '100%',
+          height: '100%',
         }}
       >
         {timeOptions.map((time, idx) => (
@@ -140,12 +134,12 @@ const Date = ({
             className="shadow"
             key={idx}
             style={{
-              backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
-              width: "100%",
-              padding: "10px 40px",
-              borderRadius: "8px",
-              border: "none",
-              transition: "background-color 300ms ease-in-out",
+              backgroundColor: selected.includes(idx) ? '#C7CEE1' : 'white',
+              width: '100%',
+              padding: '10px 40px',
+              borderRadius: '8px',
+              border: 'none',
+              transition: 'background-color 300ms ease-in-out',
             }}
           >
             {time}
@@ -154,29 +148,29 @@ const Date = ({
       </div>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          alignItems: "center",
-          marginTop: "10px",
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          alignItems: 'center',
+          marginTop: '10px',
         }}
       >
         <div
           style={{
-            display: "flex",
-            gap: "10px",
-            justifyContent: "center",
-            width: "100%",
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            width: '100%',
           }}
         >
           <button
             style={{
-              backgroundColor: "#576e93",
-              borderRadius: "4px",
-              width: "100%",
-              padding: "2px 20px",
-              color: "white",
-              border: "none",
+              backgroundColor: '#576e93',
+              borderRadius: '4px',
+              width: '100%',
+              padding: '2px 20px',
+              color: 'white',
+              border: 'none',
             }}
             className="shadow-sm"
             onClick={() => {
@@ -188,12 +182,12 @@ const Date = ({
           </button>
           <button
             style={{
-              backgroundColor: "#576e93",
-              borderRadius: "4px",
-              width: "100%",
-              padding: "2px 20px",
-              color: "white",
-              border: "none",
+              backgroundColor: '#576e93',
+              borderRadius: '4px',
+              width: '100%',
+              padding: '2px 20px',
+              color: 'white',
+              border: 'none',
             }}
             className="shadow-sm"
             onClick={() => {
@@ -206,16 +200,16 @@ const Date = ({
         </div>
         <button
           style={{
-            backgroundColor: "#576e93",
-            borderRadius: "4px",
-            padding: "2px 20px",
-            color: "white",
-            border: "none",
+            backgroundColor: '#576e93',
+            borderRadius: '4px',
+            padding: '2px 20px',
+            color: 'white',
+            border: 'none',
           }}
           className="shadow-sm"
           onClick={() => {
             updateMeetingData();
-            openFilter();
+            navigate('filter');
           }}
         >
           Submit

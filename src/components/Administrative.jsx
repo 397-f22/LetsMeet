@@ -79,7 +79,7 @@ const Administrative = () => {
     const meetingDetails = {
       name: meetingNameState,
       description: descriptionState,
-      participants: {},
+      // participants: {"None": [0, 0]},
       startTime: startState,
       endTime: endState,
       dayOptions: daysState,
@@ -91,7 +91,7 @@ const Administrative = () => {
     setDaysState(
       daysState.includes(day)
         ? daysState.filter((x) => x !== day)
-        : [...daysState, day]
+        : [...daysState, day].sort((d1, d2) => weekDays.indexOf(d1) - weekDays.indexOf(d2))
     );
   };
 

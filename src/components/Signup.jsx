@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import Date from './Date';
-import FormStepper from './FormStepper';
-import Login from './Login';
-import { useDbUpdate } from '../utilities/firebase';
-import { useFormData } from '../utilities/useFormData';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState } from "react";
+import Date from "./Date";
+import FormStepper from "./FormStepper";
+import Login from "./Login";
+import { useDbUpdate } from "../utilities/firebase";
+import { useFormData } from "../utilities/useFormData";
+import { v4 as uuidv4 } from "uuid";
+import { useLocation } from "react-router-dom";
+import { useRtdbData } from "../utilities/firebase";
 
-const Signup = ({ event, openFilter }) => {
+function HeaderView() {
+  const location = useLocation();
+}
+
+const Signup = () => {
+  const pathname = location.pathname;
+  const eventId = pathname.split("/")[2];
+  const [event, loading] = useRtdbData(`events/${eventId}`);
+
   const [state, setState] = useState({
     day: 0,
     step: 0,
-    username: '',
+    username: "",
   });
 
   // go back to previous step
@@ -34,24 +44,29 @@ const Signup = ({ event, openFilter }) => {
   const { username } = state;
   const values = { username };
 
+  // const dayOptions = Object.keys(event.dayOptions)
+  // console.log("day options: ", dayOptions)
+
+  if (loading) return <div>loading...</div>;
+
+  // event.dayOptions.map((day ))
   return (
     <FormStepper step={state.step}>
       <Login
         handleChange={(name) => setState({ ...state, username: name })}
         nextStep={nextStep}
         values={values}
-        openFilter={openFilter}
+        eventId={eventId}
       />
-      {event.events.event1.dayOption.map(([day]) => {
+      {event.dayOptions.map((day, idx) => {
         return (
           <Date
             day={day}
             key={day}
             prevStep={prevStep}
-            nextStep={nextStep}
+            nextStep={idx === event.dayOptions.length - 1 ? () => {} : nextStep}
             meetingData={event}
-            openFilter={openFilter}
-            participantName={values.username || 'unknown'}
+            participantName={values.username || "unknown"}
           />
         );
       })}

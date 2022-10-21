@@ -32,11 +32,12 @@ export const generateMeetingTimes = (
     .fill()
     .map(() => Array(0));
 
-  Object.entries(data).map(([username, arr]) => {
+  data.map(([username, arr]) => {
     arr.forEach((v) => {
       buckets[v].push(username);
     });
   });
+  console.log(buckets);
 
   let result = [];
   buckets.forEach((participants, startTime) => {
