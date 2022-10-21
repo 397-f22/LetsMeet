@@ -34,16 +34,22 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
   const mapDayToFullName = (day) => dayNameMap[day];
 
   const selectedToDB = () => {
-    const result = [];
-    const calculateBucket = (hour) =>
-      (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day];
-    for (let i = 0; i < selected.length; i++) {
-      const hour = selected[i];
-      const bucket = calculateBucket(hour);
-      result.push(bucket);
-      result.push(bucket + 1);
-    }
-    return result;
+    // const result = [];
+    // const calculateBucket = (hour) =>
+    //   (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day];
+    // for (let i = 0; i < selected.length; i++) {
+    //   const hour = selected[i];
+    //   const bucket = calculateBucket(hour);
+    //   result.push(bucket);
+    //   result.push(bucket + 1);
+    // }
+    // return result;
+
+    const list1 = selected.map(
+      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day]
+    );
+    const list2 = list1.map((hour) => hour + 1);
+    return [...list1, ...list2];
   };
 
   const dbToSelected = () => {
