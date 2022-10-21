@@ -79,7 +79,7 @@ const Administrative = () => {
     const meetingDetails = {
       name: meetingNameState,
       description: descriptionState,
-      participants: {},
+      participants: {"None": [0, 0]},
       startTime: startState,
       endTime: endState,
       dayOptions: daysState,

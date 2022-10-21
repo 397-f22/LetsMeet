@@ -44,7 +44,13 @@ const Signup = ({ openFilter }) => {
   const { username } = state;
   const values = { username };
 
+  // const dayOptions = Object.keys(event.dayOptions)
+  // console.log("day options: ", dayOptions)
+
+
   if (loading) return <div>loading...</div>;
+
+  // event.dayOptions.map((day ))
   return (
     <FormStepper step={state.step}>
       <Login
@@ -53,7 +59,7 @@ const Signup = ({ openFilter }) => {
         values={values}
         openFilter={openFilter}
       />
-      {event.dayOptions.map(([day]) => {
+      {event.dayOptions.map((day) => {
         return (
           <Date
             day={day}

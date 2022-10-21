@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { useDbUpdate } from "../utilities/firebase";
+import { useParams } from "react-router-dom";
 
 const Date = ({
   day,
@@ -9,19 +11,21 @@ const Date = ({
   participantName,
   openFilter,
 }) => {
-  const dbTimes = meetingData.participants[participantName];
-  console.log("DB TIMES"); 
-  console.log(dbTimes);
+
+  const { eventId } = useParams();
+  const [update, result] = useDbUpdate(`/events/${eventId}`);
+
+
+  // console.log("Event ID: ", eventId)
 
   // Offsets (for DB to Selected conversion)
-
   const Offsets = {
     Su: 0,
     M: 48,
     Tu: 96,
     W: 144,
     Th: 192,
-    F: 240,
+    Fr: 240,
     Sa: 288,
   };
 
@@ -31,41 +35,44 @@ const Date = ({
     Tu: "Tuesday",
     W: "Wednesday",
     Th: "Thursday",
-    F: "Friday",
+    Fr: "Friday",
     Sa: "Saturday",
   };
 
   const mapDayToFullName = (day) => dayNameMap[day];
 
-  const filteredDBTimes = (databaseTimes) => {
-    const filteredDbTimes = databaseTimes.filter((time) => {
-      Offsets <= time && Offsets + 48 > time;
-    });
-    return filteredDbTimes;
-  };
+  const selectedToDB = () => { 
+    return selected.map((hour) => hour * 2 + Offsets[day])
+  }
 
-  // Example databaseTimes = [18, 19, 20, 21]
-  // Expected return: [0, 1]
-  const DBtoSelected = (databaseTimes) => {
-    const filteredTimes = dbTimes.filter((time) => time % 2 == 0);
-    return filteredTimes.map((time) => (time - Offsets[day]) / 2 - 9);
-  };
+  const dbToSelected = () => { 
 
-  // Monday selected = [0] --> DBTIME = [48 + (i + 9) * 2, 48 + (i + 9) * 2 + 1]
-  const SelectedtoDB = (selected) => {
-    const reverseTimes = selected.map((time) => (time + 9) * 2 + Offsets[day]);
-    var b = [];
-    for (var i = 0; i < selected.length; i++) {
-      b.push(reverseTimes[i]);
-      b.push(reverseTimes[i] + 1);
+    if(meetingData.participants[participantName] !== undefined){ 
+      return meetingData.participants[participantName].map((dbTime) => (dbTime - Offsets[day]) / 2)
     }
-    return b;
+    else{
+      return []
+    }
+
+  }
+
+  const deleteNoneParticipant = () => {
+    if (meetingData.participants["None"] !== undefined && Object.keys(meetingData.participants).length > 1) {
+      delete meetingData.participants["None"];
+      console.log("should have deeleted meetingData", meetingData)
+      update(meetingData)
+    }
   };
 
-  const updateMeetingData = () => {
-    meetingData.participants[participantName] =
-      SelectedtoDB(selected);
-  };
+  const updateMeetingData = () => { 
+    const newTimes = selectedToDB(); 
+    meetingData.participants[participantName] = newTimes; 
+    update(meetingData)
+    deleteNoneParticipant(); 
+  }
+
+
+  
 
   // 1. Initialize selected
   // selected = transform(participants.participant)
@@ -73,13 +80,15 @@ const Date = ({
   // 2. When the user selects 'Next Day'or 'Previous Day' or submit
   // participants.participant = ReverseTransform(selected)
 
-  const [selected, setSelected] = useState(DBtoSelected(dbTimes));
-  // setSelected(DBtoSelected(dbTimes))
 
+  const [selected, setSelected] =  useState(dbToSelected());  
   const timeOptions = [];
+  const startTime = parseInt(meetingData.startTime) ; 
+  const endTime = parseInt(meetingData.endTime); 
 
-  for (let i = 0; i < 9; i++) {
-    timeOptions.push(`${i + 9}:00`);
+  for (let i = 0; i < endTime - startTime; i++) {
+
+    timeOptions.push(`${i + startTime}:00`);
   }
 
   const style = {

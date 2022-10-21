@@ -17,6 +17,7 @@ const App = () => {
           element={<Administrative />}
         />
         <Route path="/events/:eventId" element={<Signup openFilter={openFilter}/>} />
+        <Route path="/events/:eventId/filter" element={<Suggestion/>} />
       </Routes>
     </BrowserRouter>
   );
