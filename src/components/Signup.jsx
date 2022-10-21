@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import Date from './Date';
-import FormStepper from './FormStepper';
-import Login from './Login';
-import { useDbUpdate } from '../utilities/firebase';
-import { useFormData } from '../utilities/useFormData';
-import { v4 as uuidv4 } from 'uuid';
-import { useLocation } from 'react-router-dom';
-import { useRtdbData } from '../utilities/firebase';
+import React, { useState } from "react";
+import Date from "./Date";
+import FormStepper from "./FormStepper";
+import Login from "./Login";
+import { useDbUpdate } from "../utilities/firebase";
+import { useFormData } from "../utilities/useFormData";
+import { v4 as uuidv4 } from "uuid";
+import { useLocation } from "react-router-dom";
+import { useRtdbData } from "../utilities/firebase";
 
 function HeaderView() {
   const location = useLocation();
@@ -14,13 +14,13 @@ function HeaderView() {
 
 const Signup = () => {
   const pathname = location.pathname;
-  const eventId = pathname.split('/')[2];
+  const eventId = pathname.split("/")[2];
   const [event, loading] = useRtdbData(`events/${eventId}`);
 
   const [state, setState] = useState({
     day: 0,
     step: 0,
-    username: '',
+    username: "",
   });
 
   // go back to previous step
@@ -58,15 +58,15 @@ const Signup = () => {
         values={values}
         eventId={eventId}
       />
-      {event.dayOptions.map((day) => {
+      {event.dayOptions.map((day, idx) => {
         return (
           <Date
             day={day}
             key={day}
             prevStep={prevStep}
-            nextStep={nextStep}
+            nextStep={idx === event.dayOptions.length - 1 ? () => {} : nextStep}
             meetingData={event}
-            participantName={values.username || 'unknown'}
+            participantName={values.username || "unknown"}
           />
         );
       })}
