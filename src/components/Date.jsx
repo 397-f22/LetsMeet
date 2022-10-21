@@ -43,7 +43,8 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
     if (meetingData.participants === undefined) return [];
     if (meetingData.participants[participantName] !== undefined) {
       return meetingData.participants[participantName].map(
-        (dbTime) => (dbTime - Offsets[day]) / 2
+        (dbTime) =>
+          (dbTime - Offsets[day]) / 2 - parseInt(meetingData.startTime)
       );
     } else {
       return [];
