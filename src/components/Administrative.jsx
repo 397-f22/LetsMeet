@@ -97,12 +97,6 @@ const Administrative = () => {
     );
   };
 
-  console.log(daysState);
-  console.log(startState);
-  console.log(endState);
-  console.log(meetingNameState);
-  console.log(descriptionState);
-
   const onSubmit = (e) => {
     e.preventDefault();
     const isDaySelected = daysState.length;
@@ -226,7 +220,6 @@ const Administrative = () => {
                   required={true}
                   value={startState}
                   onChange={(e) => {
-                    // console.log(e.target.value);
                     setStartState(e.target.value);
                   }}
                 >

@@ -45,7 +45,6 @@ const Signup = () => {
   const values = { username };
 
   // const dayOptions = Object.keys(event.dayOptions)
-  // console.log("day options: ", dayOptions)
 
   if (loading) return <div>loading...</div>;
 

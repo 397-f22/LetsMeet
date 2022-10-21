@@ -37,7 +37,6 @@ export const generateMeetingTimes = (
       buckets[v].push(username);
     });
   });
-  console.log(buckets);
 
   let result = [];
   buckets.forEach((participants, startTime) => {

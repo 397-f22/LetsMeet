@@ -1,7 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
-import { useDbUpdate } from '../utilities/firebase';
-import { useNavigate, useParams } from 'react-router-dom';
+import React from "react";
+import { useState } from "react";
+import { useDbUpdate } from "../utilities/firebase";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
   const { eventId } = useParams();
@@ -22,27 +22,24 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
   };
 
   const dayNameMap = {
-    Su: 'Sunday',
-    M: 'Monday',
-    Tu: 'Tuesday',
-    W: 'Wednesday',
-    Th: 'Thursday',
-    Fr: 'Friday',
-    Sa: 'Saturday',
+    Su: "Sunday",
+    M: "Monday",
+    Tu: "Tuesday",
+    W: "Wednesday",
+    Th: "Thursday",
+    Fr: "Friday",
+    Sa: "Saturday",
   };
 
   const mapDayToFullName = (day) => dayNameMap[day];
 
   const selectedToDB = () => {
     return selected.map(
-      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day] 
+      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day]
     );
   };
 
   const dbToSelected = () => {
-    console.log("PRINTING MEETING DATA", meetingData);
-    console.log(meetingData.startTime);  
-    console.log(parseInt(meetingData.startTime));
     if (meetingData.participants === undefined) return [];
     if (meetingData.participants[participantName] !== undefined) {
       return meetingData.participants[participantName].map(
@@ -75,9 +72,9 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
   }
 
   const style = {
-    width: '100%',
-    height: '50px',
-    borderRadius: '5px',
+    width: "100%",
+    height: "50px",
+    borderRadius: "5px",
   };
 
   const TimeBlock = ({ time, idx }) => {
@@ -96,40 +93,38 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
       ? lst.filter((y) => y !== x && y !== x + 1 / 2)
       : [x, x + 1 / 2, ...lst];
 
-  console.log("SELECTED: ", selected);
-
   return (
     <div
       style={{
-        display: 'grid',
-        gridTemplateRows: '10% 70% 20%',
-        height: '100vh',
-        width: '100%',
-        alignItems: 'center',
-        padding: '5%',
-        textAlign: 'center',
+        display: "grid",
+        gridTemplateRows: "10% 70% 20%",
+        height: "100vh",
+        width: "100%",
+        alignItems: "center",
+        padding: "5%",
+        textAlign: "center",
       }}
     >
       <h1
         style={{
-          width: '100%',
-          padding: '20px',
+          width: "100%",
+          padding: "20px",
         }}
       >
-        <span style={{ color: '#A8B8D2' }}>{mapDayToFullName(day)}</span>{' '}
+        <span style={{ color: "#A8B8D2" }}>{mapDayToFullName(day)}</span>{" "}
         Availability
       </h1>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1rem',
-          textAlign: 'center',
-          overflow: 'auto',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1rem",
+          textAlign: "center",
+          overflow: "auto",
+          padding: "20px",
+          width: "100%",
+          height: "100%",
         }}
       >
         {timeOptions.map((time, idx) => (
@@ -138,12 +133,12 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
             className="shadow"
             key={idx}
             style={{
-              backgroundColor: selected.includes(idx) ? '#C7CEE1' : 'white',
-              width: '100%',
-              padding: '10px 40px',
-              borderRadius: '8px',
-              border: 'none',
-              transition: 'background-color 300ms ease-in-out',
+              backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
+              width: "100%",
+              padding: "10px 40px",
+              borderRadius: "8px",
+              border: "none",
+              transition: "background-color 300ms ease-in-out",
             }}
           >
             {time}
@@ -152,29 +147,29 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
       </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          alignItems: 'center',
-          marginTop: '10px',
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          alignItems: "center",
+          marginTop: "10px",
         }}
       >
         <div
           style={{
-            display: 'flex',
-            gap: '10px',
-            justifyContent: 'center',
-            width: '100%',
+            display: "flex",
+            gap: "10px",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
           <button
             style={{
-              backgroundColor: '#576e93',
-              borderRadius: '4px',
-              width: '100%',
-              padding: '2px 20px',
-              color: 'white',
-              border: 'none',
+              backgroundColor: "#576e93",
+              borderRadius: "4px",
+              width: "100%",
+              padding: "2px 20px",
+              color: "white",
+              border: "none",
             }}
             className="shadow-sm"
             onClick={() => {
@@ -186,12 +181,12 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
           </button>
           <button
             style={{
-              backgroundColor: '#576e93',
-              borderRadius: '4px',
-              width: '100%',
-              padding: '2px 20px',
-              color: 'white',
-              border: 'none',
+              backgroundColor: "#576e93",
+              borderRadius: "4px",
+              width: "100%",
+              padding: "2px 20px",
+              color: "white",
+              border: "none",
             }}
             className="shadow-sm"
             onClick={() => {
@@ -204,16 +199,16 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
         </div>
         <button
           style={{
-            backgroundColor: '#576e93',
-            borderRadius: '4px',
-            padding: '2px 20px',
-            color: 'white',
-            border: 'none',
+            backgroundColor: "#576e93",
+            borderRadius: "4px",
+            padding: "2px 20px",
+            color: "white",
+            border: "none",
           }}
           className="shadow-sm"
           onClick={() => {
             updateMeetingData();
-            navigate('filter');
+            navigate("filter");
           }}
         >
           Submit
