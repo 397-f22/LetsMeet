@@ -5,18 +5,18 @@ import Login from './Login';
 import { useDbUpdate } from '../utilities/firebase';
 import { useFormData } from '../utilities/useFormData';
 import { v4 as uuidv4 } from 'uuid';
-import { useLocation } from 'react-router-dom'
-import { useRtdbData } from "../utilities/firebase";
+import { useLocation } from 'react-router-dom';
+import { useRtdbData } from '../utilities/firebase';
 
 function HeaderView() {
   const location = useLocation();
 }
 
-const Signup = ({ openFilter }) => {
-  const pathname = location.pathname; 
-  const event_id = pathname.split('/')[2]; 
-  const [event, loading] = useRtdbData(`events/${event_id}`);
-  
+const Signup = () => {
+  const pathname = location.pathname;
+  const eventId = pathname.split('/')[2];
+  const [event, loading] = useRtdbData(`events/${eventId}`);
+
   const [state, setState] = useState({
     day: 0,
     step: 0,
@@ -47,7 +47,6 @@ const Signup = ({ openFilter }) => {
   // const dayOptions = Object.keys(event.dayOptions)
   // console.log("day options: ", dayOptions)
 
-
   if (loading) return <div>loading...</div>;
 
   // event.dayOptions.map((day ))
@@ -57,7 +56,7 @@ const Signup = ({ openFilter }) => {
         handleChange={(name) => setState({ ...state, username: name })}
         nextStep={nextStep}
         values={values}
-        openFilter={openFilter}
+        eventId={eventId}
       />
       {event.dayOptions.map((day) => {
         return (
@@ -67,7 +66,6 @@ const Signup = ({ openFilter }) => {
             prevStep={prevStep}
             nextStep={nextStep}
             meetingData={event}
-            openFilter={openFilter}
             participantName={values.username || 'unknown'}
           />
         );

@@ -1,22 +1,13 @@
-import React from "react";
-import { useState } from "react";
-import { useDbUpdate } from "../utilities/firebase";
-import { useParams } from "react-router-dom";
+import React from 'react';
+import { useState } from 'react';
+import { useDbUpdate } from '../utilities/firebase';
+import { useParams } from 'react-router-dom';
 
-const Date = ({
-  day,
-  prevStep,
-  nextStep,
-  meetingData,
-  participantName,
-  openFilter,
-}) => {
-
+const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
   const { eventId } = useParams();
-  const [update, result] = useDbUpdate(`/events/${eventId}`);
-
-
-  // console.log("Event ID: ", eventId)
+  const [update, result] = useDbUpdate(
+    `/events/${eventId}/participants/${participantName}`
+  );
 
   // Offsets (for DB to Selected conversion)
   const Offsets = {
@@ -30,49 +21,36 @@ const Date = ({
   };
 
   const dayNameMap = {
-    Su: "Sunday",
-    M: "Monday",
-    Tu: "Tuesday",
-    W: "Wednesday",
-    Th: "Thursday",
-    Fr: "Friday",
-    Sa: "Saturday",
+    Su: 'Sunday',
+    M: 'Monday',
+    Tu: 'Tuesday',
+    W: 'Wednesday',
+    Th: 'Thursday',
+    Fr: 'Friday',
+    Sa: 'Saturday',
   };
 
   const mapDayToFullName = (day) => dayNameMap[day];
 
-  const selectedToDB = () => { 
-    return selected.map((hour) => hour * 2 + Offsets[day])
-  }
+  const selectedToDB = () => {
+    return selected.map((hour) => hour * 2 + Offsets[day]);
+  };
 
-  const dbToSelected = () => { 
-
-    if(meetingData.participants[participantName] !== undefined){ 
-      return meetingData.participants[participantName].map((dbTime) => (dbTime - Offsets[day]) / 2)
-    }
-    else{
-      return []
-    }
-
-  }
-
-  const deleteNoneParticipant = () => {
-    if (meetingData.participants["None"] !== undefined && Object.keys(meetingData.participants).length > 1) {
-      delete meetingData.participants["None"];
-      console.log("should have deeleted meetingData", meetingData)
-      update(meetingData)
+  const dbToSelected = () => {
+    if (meetingData.participants === undefined) return [];
+    if (meetingData.participants[participantName] !== undefined) {
+      return meetingData.participants[participantName].map(
+        (dbTime) => (dbTime - Offsets[day]) / 2
+      );
+    } else {
+      return [];
     }
   };
 
-  const updateMeetingData = () => { 
-    const newTimes = selectedToDB(); 
-    meetingData.participants[participantName] = newTimes; 
-    update(meetingData)
-    deleteNoneParticipant(); 
-  }
-
-
-  
+  const updateMeetingData = () => {
+    const newTimes = selectedToDB();
+    update({ ...newTimes });
+  };
 
   // 1. Initialize selected
   // selected = transform(participants.participant)
@@ -80,21 +58,19 @@ const Date = ({
   // 2. When the user selects 'Next Day'or 'Previous Day' or submit
   // participants.participant = ReverseTransform(selected)
 
-
-  const [selected, setSelected] =  useState(dbToSelected());  
+  const [selected, setSelected] = useState(dbToSelected());
   const timeOptions = [];
-  const startTime = parseInt(meetingData.startTime) ; 
-  const endTime = parseInt(meetingData.endTime); 
+  const startTime = parseInt(meetingData.startTime);
+  const endTime = parseInt(meetingData.endTime);
 
   for (let i = 0; i < endTime - startTime; i++) {
-
     timeOptions.push(`${i + startTime}:00`);
   }
 
   const style = {
-    width: "100%",
-    height: "50px",
-    borderRadius: "5px",
+    width: '100%',
+    height: '50px',
+    borderRadius: '5px',
   };
 
   const TimeBlock = ({ time, idx }) => {
@@ -111,38 +87,40 @@ const Date = ({
   const toggle = (x, lst) =>
     lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst];
 
+  console.log(selected);
+
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateRows: "10% 70% 20%",
-        height: "100vh",
-        width: "100%",
-        alignItems: "center",
-        padding: "5%",
-        textAlign: "center",
+        display: 'grid',
+        gridTemplateRows: '10% 70% 20%',
+        height: '100vh',
+        width: '100%',
+        alignItems: 'center',
+        padding: '5%',
+        textAlign: 'center',
       }}
     >
       <h1
         style={{
-          width: "100%",
-          padding: "20px",
+          width: '100%',
+          padding: '20px',
         }}
       >
-        <span style={{ color: "#A8B8D2" }}>{mapDayToFullName(day)}</span>{" "}
+        <span style={{ color: '#A8B8D2' }}>{mapDayToFullName(day)}</span>{' '}
         Availability
       </h1>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "1rem",
-          textAlign: "center",
-          overflow: "auto",
-          padding: "20px",
-          width: "100%",
-          height: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem',
+          textAlign: 'center',
+          overflow: 'auto',
+          padding: '20px',
+          width: '100%',
+          height: '100%',
         }}
       >
         {timeOptions.map((time, idx) => (
@@ -151,12 +129,12 @@ const Date = ({
             className="shadow"
             key={idx}
             style={{
-              backgroundColor: selected.includes(idx) ? "#C7CEE1" : "white",
-              width: "100%",
-              padding: "10px 40px",
-              borderRadius: "8px",
-              border: "none",
-              transition: "background-color 300ms ease-in-out",
+              backgroundColor: selected.includes(idx) ? '#C7CEE1' : 'white',
+              width: '100%',
+              padding: '10px 40px',
+              borderRadius: '8px',
+              border: 'none',
+              transition: 'background-color 300ms ease-in-out',
             }}
           >
             {time}
@@ -165,29 +143,29 @@ const Date = ({
       </div>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          alignItems: "center",
-          marginTop: "10px",
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          alignItems: 'center',
+          marginTop: '10px',
         }}
       >
         <div
           style={{
-            display: "flex",
-            gap: "10px",
-            justifyContent: "center",
-            width: "100%",
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            width: '100%',
           }}
         >
           <button
             style={{
-              backgroundColor: "#576e93",
-              borderRadius: "4px",
-              width: "100%",
-              padding: "2px 20px",
-              color: "white",
-              border: "none",
+              backgroundColor: '#576e93',
+              borderRadius: '4px',
+              width: '100%',
+              padding: '2px 20px',
+              color: 'white',
+              border: 'none',
             }}
             className="shadow-sm"
             onClick={() => {
@@ -199,12 +177,12 @@ const Date = ({
           </button>
           <button
             style={{
-              backgroundColor: "#576e93",
-              borderRadius: "4px",
-              width: "100%",
-              padding: "2px 20px",
-              color: "white",
-              border: "none",
+              backgroundColor: '#576e93',
+              borderRadius: '4px',
+              width: '100%',
+              padding: '2px 20px',
+              color: 'white',
+              border: 'none',
             }}
             className="shadow-sm"
             onClick={() => {
@@ -217,16 +195,15 @@ const Date = ({
         </div>
         <button
           style={{
-            backgroundColor: "#576e93",
-            borderRadius: "4px",
-            padding: "2px 20px",
-            color: "white",
-            border: "none",
+            backgroundColor: '#576e93',
+            borderRadius: '4px',
+            padding: '2px 20px',
+            color: 'white',
+            border: 'none',
           }}
           className="shadow-sm"
           onClick={() => {
             updateMeetingData();
-            openFilter();
           }}
         >
           Submit
