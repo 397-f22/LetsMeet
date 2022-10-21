@@ -35,15 +35,18 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
 
   const selectedToDB = () => {
     return selected.map(
-      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day]
+      (hour) => (parseInt(meetingData.startTime) + hour) * 2 + Offsets[day] 
     );
   };
 
   const dbToSelected = () => {
+    console.log("PRINTING MEETING DATA", meetingData);
+    console.log(meetingData.startTime);  
+    console.log(parseInt(meetingData.startTime));
     if (meetingData.participants === undefined) return [];
     if (meetingData.participants[participantName] !== undefined) {
       return meetingData.participants[participantName].map(
-        (dbTime) => (dbTime - Offsets[day]) / 2
+        (dbTime) => (dbTime - Offsets[day] - parseInt(meetingData.startTime)) / 2
       );
     } else {
       return [];
@@ -92,7 +95,7 @@ const Date = ({ day, prevStep, nextStep, meetingData, participantName }) => {
       ? lst.filter((y) => y !== x && y !== x + 1 / 2)
       : [x, x + 1 / 2, ...lst];
 
-  console.log(selected);
+  console.log("SELECTED: ", selected);
 
   return (
     <div
