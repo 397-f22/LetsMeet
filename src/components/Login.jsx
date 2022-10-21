@@ -1,8 +1,13 @@
 import React from 'react';
+import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useRtdbData } from "../utilities/firebase";
 
 const Login = ({ handleChange, values, nextStep, eventId }) => {
+  const [event, loading] = useRtdbData(`events/${eventId}`);
+  console.log(event); 
   const navigate = useNavigate();
+  if (loading) return <div>loading...</div>;
   return (
     <div
       style={{
@@ -20,7 +25,7 @@ const Login = ({ handleChange, values, nextStep, eventId }) => {
           padding: '20px',
         }}
       >
-        Swarm Meeting 3
+        {event.description}
       </h1>
       <label>
         Name
