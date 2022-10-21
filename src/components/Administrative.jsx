@@ -91,7 +91,9 @@ const Administrative = () => {
     setDaysState(
       daysState.includes(day)
         ? daysState.filter((x) => x !== day)
-        : [...daysState, day].sort((d1, d2) => weekDays.indexOf(d1) - weekDays.indexOf(d2))
+        : [...daysState, day].sort(
+            (d1, d2) => weekDays.indexOf(d1) - weekDays.indexOf(d2)
+          )
     );
   };
 
@@ -143,7 +145,7 @@ const Administrative = () => {
         }}
         onSubmit={(e) => onSubmit(e)}
       >
-        <label style={{ fontWeight: "bold" }}>
+        <label style={{ fontWeight: "bold", width: "100%" }}>
           New Meeting
           <input
             required={true}
@@ -151,6 +153,7 @@ const Administrative = () => {
               display: "block",
               borderRadius: "4px",
               padding: "5px 10px",
+              width: "100%",
             }}
             type="text"
             placeholder="Meeting Name"
@@ -159,13 +162,14 @@ const Administrative = () => {
             }}
           />
         </label>
-        <label style={{ fontWeight: "bold" }}>
+        <label style={{ fontWeight: "bold", width: "100%" }}>
           Description
           <input
             style={{
               display: "block",
               borderRadius: "4px",
               padding: "5px 10px",
+              width: "100%",
             }}
             type="text"
             placeholder="Optional"
@@ -206,50 +210,67 @@ const Administrative = () => {
               );
             })}
           </div>
+          {daysError && (
+            <p style={{ fontSize: "0.75rem", color: "red", marginTop: "5px" }}>
+              You must select at least one day
+            </p>
+          )}
         </div>
-        {daysError && <p>You must select at least one day</p>}
-        <div style={{ display: "flex", gap: "3rem" }}>
-          <div>
-            <label style={{ fontWeight: "bold" }}>
-              Start Time
-              <select
-                className="mx-2"
-                required={true}
-                value={startState}
-                onChange={(e) => {
-                  // console.log(e.target.value);
-                  setStartState(e.target.value);
-                }}
-              >
-                {startHours.map((h, id) => (
-                  <option key={id} value={h}>
-                    {h}{" "}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <div>
+          <div style={{ display: "flex", gap: "3rem" }}>
+            <div>
+              <label style={{ fontWeight: "bold" }}>
+                Start Time
+                <select
+                  className="mx-2"
+                  required={true}
+                  value={startState}
+                  onChange={(e) => {
+                    // console.log(e.target.value);
+                    setStartState(e.target.value);
+                  }}
+                >
+                  {startHours.map((h, id) => (
+                    <option key={id} value={h}>
+                      {h}{" "}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label style={{ fontWeight: "bold" }}>
+                End Time
+                <select
+                  className="mx-2"
+                  required={true}
+                  value={endState}
+                  onChange={(e) => {
+                    setEndState(e.target.value);
+                  }}
+                >
+                  {endHours.map((h, id) => (
+                    <option key={id} value={h}>
+                      {h}{" "}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
           </div>
-          <div>
-            <label style={{ fontWeight: "bold" }}>
-              End Time
-              <select
-                className="mx-2"
-                required={true}
-                value={endState}
-                onChange={(e) => {
-                  setEndState(e.target.value);
-                }}
-              >
-                {endHours.map((h, id) => (
-                  <option key={id} value={h}>
-                    {h}{" "}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          {startEndError && (
+            <p
+              style={{
+                display: "block",
+                fontSize: "0.75rem",
+                color: "red",
+                marginTop: "5px",
+              }}
+            >
+              Start time cannot be greater than end time
+            </p>
+          )}
         </div>
-        {startEndError && <p>Start time cannot be greater than end time</p>}
       </form>
 
       <div style={{ marginBottom: "5rem" }}>
